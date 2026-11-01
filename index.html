@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Exposición MDS</title>
+<style>
+/* Barra suiza de una línea arriba, presentación a todo lo demás. Un solo look, sin tema oscuro. */
+@font-face{font-family:'Archivo Black';font-display:swap;src:url(fonts/ArchivoBlack-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-weight:600;font-display:swap;src:url(fonts/Archivo-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-weight:800;font-display:swap;src:url(fonts/Archivo-800.woff2) format('woff2')}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#F4F2EE;--ink:#0A0A0A;--red:#E10600;--line:#0A0A0A2E;--display:'Archivo Black',Impact,sans-serif;--body:Archivo,system-ui,sans-serif;color-scheme:light}
+html,body{height:100%}
+body{display:flex;flex-direction:column;background:var(--ink);color:var(--ink);font-family:var(--body)}
+.bar{background:var(--paper);border-bottom:4px solid var(--ink);padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
+h1{font:400 clamp(20px,2.4vw,28px)/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;min-width:0}
+h1 span{color:var(--red)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+button{font:800 15px/1 var(--body);min-height:44px;padding:0 16px;border:3px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button:hover{background:#0A0A0A14}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+#jump{border-color:var(--red);background:var(--red);color:#fff}
+.help{flex:1 1 280px;min-width:0;font-size:14px;font-weight:600;line-height:1.35;text-align:right}
+main{flex:1;min-height:0;position:relative}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--ink)}
+@media (max-width:760px){.bar{padding-block:8px;gap:6px 8px}.help{display:none}h1{flex-basis:100%}button{min-height:40px;padding:0 10px;font-size:14px;border-width:2px}.long{display:none}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>Exposición <span>MDS</span></h1>
+  <div class="tabs" role="group" aria-label="Versión de la presentación">
+    <button id="tab-a" aria-pressed="true" data-src="version-a.html"><span class="long">Versión </span>A · Suiza</button>
+    <button id="tab-b" aria-pressed="false" data-src="constelaciones.html"><span class="long">Versión </span>B · Constelaciones</button>
+  </div>
+  <button id="jump">Ir al video</button>
+  <p class="help">Vean las dos y decidan por el grupo. Clic en la presentación y luego ← → para pasar diapositivas. Los recuadros punteados son espacios por llenar.</p>
+</header>
+<main><iframe id="deck" title="Presentación" src="version-a.html" allow="autoplay; fullscreen" allowfullscreen></iframe></main>
+
+<script>
+const deck=document.getElementById('deck'),tabs=[...document.querySelectorAll('.tabs button')];
+let active=tabs[0];
+function show(tab,hash=''){active=tab;tabs.forEach(t=>t.setAttribute('aria-pressed',t===tab));deck.src=tab.dataset.src+hash;}
+tabs.forEach(t=>t.addEventListener('click',()=>show(t)));
+// Las dos versiones tienen el video en la diapositiva 9
+document.getElementById('jump').addEventListener('click',()=>{deck.src='about:blank';setTimeout(()=>show(active,'#9'),30);});
+deck.addEventListener('load',()=>{try{deck.contentWindow.focus();}catch(e){}});
+</script>
+</body>
+</html>
