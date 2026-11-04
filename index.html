@@ -191,9 +191,9 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 </section>
 
 <!-- ===================== 3 · JUSTIFICACIÓN (a) ===================== -->
-<section class="slide" data-sec="3" data-scene="relational" data-notes="<h4>Justificación · ¿por qué una técnica multivariada?</h4><ul><li>El MDS toma proximidades (qué tan parecido o diferente es cada par de ítems) y produce un mapa espacial. La distancia entre 2 puntos representa la similitud: más cerca = más parecidos; más lejos = menos parecidos. El analista decide cuántas dimensiones tiene el mapa.</li><li>Es relacional y multivariado: un ítem no se define solo por un valor, sino por cómo se relaciona con todos los demás. La animación lo muestra: el ítem rojo queda ubicado por sus relaciones con los otros 11.</li><li>Comúnmente se usa en psicología con 10 a 30 estímulos (imágenes, palabras o rostros que se le presentan a una persona para que juzgue su parecido). Aquí querían saber si seguía funcionando hasta con 1.024.</li><li>Prácticamente el MDS no se usó para estudiar los estímulos: los estímulos sirvieron para estudiar la capacidad del MDS.</li></ul>">
+<section class="slide" data-sec="3" data-scene="relational" data-notes="<h4>Justificación · Pregunta 1: ¿Por qué utilizaron esta técnica multivariada?</h4><ul><li>El MDS toma proximidades (qué tan parecido o diferente es cada par de ítems) y produce un mapa espacial. La distancia entre 2 puntos representa la similitud: más cerca = más parecidos; más lejos = menos parecidos. El analista decide cuántas dimensiones tiene el mapa.</li><li>Es relacional y multivariado: un ítem no se define solo por un valor, sino por cómo se relaciona con todos los demás. La animación lo muestra: el ítem rojo queda ubicado por sus relaciones con los otros 11.</li><li>Comúnmente se usa en psicología con 10 a 30 estímulos (imágenes, palabras o rostros que se le presentan a una persona para que juzgue su parecido). Aquí querían saber si seguía funcionando hasta con 1.024.</li><li>Prácticamente el MDS no se usó para estudiar los estímulos: los estímulos sirvieron para estudiar la capacidad del MDS.</li></ul>">
   <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · ¿por qué esta técnica multivariada?</div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · Pregunta 1 · ¿Por qué utilizaron esta técnica multivariada?</div>
   <h2 class="big h wipe" style="--d:250;font-size:92px">Cerca =<br><span class="red">parecido</span></h2>
   <div class="tx r abs" style="--d:600;left:80px;top:410px;width:660px">
     <p>El MDS toma <b>proximidades</b>, qué tan parecido o diferente es cada par de ítems, y produce un <b>mapa espacial</b>. La distancia entre dos puntos es su similitud. El analista decide cuántas dimensiones tiene el mapa.</p>
@@ -204,30 +204,10 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
   <div class="r abs mono sm mute" style="--d:1600;left:80px;top:780px;width:680px;font-size:15px">En psicología: 10 a 30 estímulos (imágenes, palabras o rostros) que una persona juzga por su parecido</div>
 </section>
 
-<!-- ===================== 3 · JUSTIFICACIÓN (b) PARADOJA ===================== -->
-<section class="slide" data-sec="3" data-notes="<h4>Justificación · ¿qué les permitió descubrir que habría sido difícil con un análisis más sencillo?</h4><ul><li>El documento lo explica con grandes hallazgos. El primero es la paradoja del MDS. (Nota: el Word anuncia 3 hallazgos pero por ahora solo trae este, y el párrafo queda cortado al final.)</li><li>Si se hace un análisis simple, como calcular un promedio o una correlación directa entre lo que las personas responden sin antes hacer un escalamiento multidimensional, se puede concluir que cuantos más objetos se ponen a evaluar, la respuesta se vuelve más imprecisa: las personas se cansan.</li><li>En el MDS se evalúa una métrica llamada estrés (stress), que sube a medida que se agregan más datos. Con 100 objetos el valor era altísimo, y por eso se pensaba que el mapa &quot;estaba mal construido&quot;.</li><li>El estudio demostró que ese estrés sube simplemente por la acumulación de pequeñas imprecisiones numéricas al responder, pero la ubicación de los puntos en el mapa se vuelve más precisa.</li><li>Con el análisis plano la conclusión sería: &quot;No usemos muchos objetos, porque la gente se equivoca más y los datos son cada vez peores&quot;.</li><li>El MDS no evalúa cada dato aislado: la posición de un punto no depende de una sola respuesta, sino de sus relaciones con los demás elementos del espacio. Usa n − 1 proximidades: en un conjunto de 1.024 ítems, la ubicación de cada uno está respaldada por 1.023 objetos.</li></ul>">
+<!-- ===================== 3 · JUSTIFICACIÓN (b) · PREGUNTA 1 ===================== -->
+<section class="slide" data-sec="3" data-notes="<h4>Justificación · Pregunta 1 (continuación): métrico y Monte Carlo</h4><ul><li>Usaron un MDS métrico, que utiliza números con distancias reales entre ellos (por ejemplo, calificándolas del 0 al 100). El no métrico usa solo el orden de mayor a menor.</li><li>Para probarlo usaron simulaciones Monte Carlo: un experimento que se repite muchas veces, generado por computador con datos aleatorios, y luego se mira qué pasa con el promedio.</li><li>Se hizo así porque con datos reales no se conoce el mapa verdadero. Crearon un espacio &quot;verdadero&quot;, le sumaron ruido aleatorio (imitando que no se califica perfectamente), corrieron el MDS y compararon.</li><li>Variaron la cantidad de ruido, el número de ítems y la dimensionalidad para ver cómo reaccionaba, repitiendo cada condición 500 veces.</li></ul>">
   <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · ¿qué permitió descubrir?</div>
-  <h2 class="big h wipe" style="--d:250;font-size:84px">La paradoja<br>del <span class="red">MDS</span></h2>
-  <div class="abs" style="left:80px;right:80px;top:390px;display:grid;grid-template-columns:1fr 70px 1fr;align-items:stretch">
-    <div class="card r" style="--d:500;padding:26px">
-      <span class="tag k">Análisis simple · promedio o correlación directa</span>
-      <div class="sm" style="margin-top:6px">Más objetos para evaluar = respuestas <b>más imprecisas</b>. El <b>stress sube</b> con más datos: con 100 objetos era altísimo y parecía que el mapa <b>&quot;estaba mal construido&quot;</b>.</div>
-      <div class="quote" style="font-size:21px;margin-top:16px;border-left-color:var(--ink)">&quot;No usemos muchos objetos: la gente se equivoca más y los datos son cada vez peores&quot;</div>
-    </div>
-    <div class="num red r" style="--d:800;font-size:60px;display:grid;place-items:center">→</div>
-    <div class="card fill r" style="--d:1000;padding:26px">
-      <span class="tag">Con el MDS</span>
-      <div class="sm" style="margin-top:6px">No evalúa cada dato aislado: la posición de un punto depende de <b>sus relaciones con todos los demás</b>. El stress sube por la suma de pequeñas imprecisiones, pero <b style="color:#FF6A5F">la ubicación se vuelve más precisa</b>.</div>
-      <div style="display:flex;align-items:baseline;gap:16px;margin-top:16px"><span class="num" style="font-size:64px;color:#FF6A5F">1.023</span><span class="sm">comparaciones respaldan cada ítem en un conjunto de <b>1.024</b> · n − 1</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== 3 · JUSTIFICACIÓN (c) ===================== -->
-<section class="slide" data-sec="3" data-notes="<h4>Justificación · métrico y Monte Carlo</h4><ul><li>Usaron un MDS métrico, que utiliza números con distancias reales entre ellos (por ejemplo, calificándolas del 0 al 100). El no métrico usa solo el orden de mayor a menor.</li><li>Para probarlo usaron simulaciones Monte Carlo: un experimento que se repite muchas veces, generado por computador con datos aleatorios, y luego se mira qué pasa con el promedio.</li><li>Se hizo así porque con datos reales no se conoce el mapa verdadero. Crearon un espacio &quot;verdadero&quot;, le sumaron ruido aleatorio (imitando que no se califica perfectamente), corrieron el MDS y compararon.</li><li>Variaron la cantidad de ruido, el número de ítems y la dimensionalidad para ver cómo reaccionaba, repitiendo cada condición 500 veces.</li></ul>">
-  <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>03</b> — Justificación de la técnica</div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · Pregunta 1 · ¿Por qué utilizaron esta técnica multivariada?</div>
   <h2 class="big h wipe" style="--d:250;font-size:84px">Métrico y<br>por <span class="red">simulación</span></h2>
   <div class="r abs" style="--d:500;left:80px;top:400px;width:640px">
     <span class="tag">MDS métrico (el que usaron) vs. no métrico</span>
@@ -247,6 +227,27 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
       <div class="card redb" style="padding:14px 16px"><span class="tag">4 · Comparar</span><div class="sm">el mapa obtenido <b>contra el verdadero</b></div></div>
     </div>
     <div class="sm" style="margin-top:14px">Variando ruido, ítems y dimensionalidad · <b class="red">500 repeticiones</b> por condición</div>
+  </div>
+</section>
+
+<!-- ===================== 3 · JUSTIFICACIÓN (c) · PREGUNTA 2 · PARADOJA ===================== -->
+<section class="slide" data-sec="3" data-notes="<h4>Justificación · Pregunta 2: ¿Qué les permitió descubrir que habría sido difícil identificar mediante un análisis más sencillo?</h4><ul><li>El documento lo explica con grandes hallazgos. El primero es la paradoja del MDS. (Nota: el Word anuncia 3 hallazgos pero por ahora solo trae este, y el párrafo queda cortado al final.)</li><li>Si se hace un análisis simple, como calcular un promedio o una correlación directa entre lo que las personas responden sin antes hacer un escalamiento multidimensional, se puede concluir que cuantos más objetos se ponen a evaluar, la respuesta se vuelve más imprecisa: las personas se cansan.</li><li>En el MDS se evalúa una métrica llamada estrés (stress), que sube a medida que se agregan más datos. Con 100 objetos el valor era altísimo, y por eso se pensaba que el mapa &quot;estaba mal construido&quot;.</li><li>El estudio demostró que ese estrés sube simplemente por la acumulación de pequeñas imprecisiones numéricas al responder, pero la ubicación de los puntos en el mapa se vuelve más precisa.</li><li>Con el análisis plano la conclusión sería: &quot;No usemos muchos objetos, porque la gente se equivoca más y los datos son cada vez peores&quot;.</li><li>El MDS no evalúa cada dato aislado: la posición de un punto no depende de una sola respuesta, sino de sus relaciones con los demás elementos del espacio. Usa n − 1 proximidades: en un conjunto de 1.024 ítems, la ubicación de cada uno está respaldada por 1.023 objetos.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · Pregunta 2</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">La paradoja<br>del <span class="red">MDS</span></h2>
+  <div class="r abs" style="--d:400;left:80px;top:352px;width:1440px;border-left:8px solid var(--red);padding:4px 0 4px 18px;font-size:24px;font-weight:800">¿Qué les permitió descubrir que habría sido difícil identificar mediante un análisis más sencillo?</div>
+  <div class="abs" style="left:80px;right:80px;top:420px;display:grid;grid-template-columns:1fr 70px 1fr;align-items:stretch">
+    <div class="card r" style="--d:500;padding:26px">
+      <span class="tag k">Análisis simple · promedio o correlación directa</span>
+      <div class="sm" style="margin-top:6px">Más objetos para evaluar = respuestas <b>más imprecisas</b>. El <b>stress sube</b> con más datos: con 100 objetos era altísimo y parecía que el mapa <b>&quot;estaba mal construido&quot;</b>.</div>
+      <div class="quote" style="font-size:21px;margin-top:16px;border-left-color:var(--ink)">&quot;No usemos muchos objetos: la gente se equivoca más y los datos son cada vez peores&quot;</div>
+    </div>
+    <div class="num red r" style="--d:800;font-size:60px;display:grid;place-items:center">→</div>
+    <div class="card fill r" style="--d:1000;padding:26px">
+      <span class="tag">Con el MDS</span>
+      <div class="sm" style="margin-top:6px">No evalúa cada dato aislado: la posición de un punto depende de <b>sus relaciones con todos los demás</b>. El stress sube por la suma de pequeñas imprecisiones, pero <b style="color:#FF6A5F">la ubicación se vuelve más precisa</b>.</div>
+      <div style="display:flex;align-items:baseline;gap:16px;margin-top:16px"><span class="num" style="font-size:64px;color:#FF6A5F">1.023</span><span class="sm">comparaciones respaldan cada ítem en un conjunto de <b>1.024</b> · n − 1</span></div>
+    </div>
   </div>
 </section>
 
