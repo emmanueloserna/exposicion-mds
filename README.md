@@ -1,10 +1,9 @@
 # Exposición MDS
 
-Presentación sobre Hout, Cunningham, Robbins & MacDonald (2018), Análisis de Datos 2.
+Presentación sobre Hout, Cunningham, Robbins & MacDonald (2018), Análisis de Datos 2 (EAFIT).
 
-- `index.html`: página para comparar las dos versiones.
-- `version-a.html`: versión Suiza.
-- `constelaciones.html`: versión Constelaciones.
-- `video/Participante_7.mp4`: video de la diapositiva 9.
+- `index.html`: la presentación (19 diapositivas, construida sobre el documento del equipo).
+- `video/Participante_7.mp4`: video aparte, no está dentro de la presentación.
 
-Las fotos conservan sus créditos en la diapositiva de referencias.
+Controles: ← → para navegar · F pantalla completa · N notas del expositor · clic en una figura para ampliarla.
+Figuras 1, 3, 4 y 5: Hout et al. (2018).

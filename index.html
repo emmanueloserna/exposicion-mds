@@ -2,52 +2,590 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Exposición MDS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MDS con muchos ítems</title>
 <style>
-/* Barra suiza de una línea arriba, presentación a todo lo demás. Un solo look, sin tema oscuro. */
-@font-face{font-family:'Archivo Black';font-display:swap;src:url(fonts/ArchivoBlack-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo Black';font-weight:400;font-display:swap;src:url(fonts/ArchivoBlack-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-weight:400;font-display:swap;src:url(fonts/Archivo-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-weight:600;font-display:swap;src:url(fonts/Archivo-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-weight:800;font-display:swap;src:url(fonts/Archivo-800.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-weight:500;font-display:swap;src:url(fonts/JetBrainsMono-500.woff2) format('woff2')}
+
+:root{--paper:#F4F2EE;--ink:#0A0A0A;--red:#E10600;--mute:#0A0A0A80;--line:#0A0A0A1A;--soft:#0A0A0A0D;
+  --ease:cubic-bezier(.77,0,.18,1);--out:cubic-bezier(.16,1,.3,1)}
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--paper:#F4F2EE;--ink:#0A0A0A;--red:#E10600;--line:#0A0A0A2E;--display:'Archivo Black',Impact,sans-serif;--body:Archivo,system-ui,sans-serif;color-scheme:light}
-html,body{height:100%}
-body{display:flex;flex-direction:column;background:var(--ink);color:var(--ink);font-family:var(--body)}
-.bar{background:var(--paper);border-bottom:4px solid var(--ink);padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
-h1{font:400 clamp(20px,2.4vw,28px)/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;min-width:0}
-h1 span{color:var(--red)}
-.tabs{display:flex;flex-wrap:wrap;gap:8px}
-button{font:800 15px/1 var(--body);min-height:44px;padding:0 16px;border:3px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
-button:hover{background:#0A0A0A14}
-button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
-.tabs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
-#jump{border-color:var(--red);background:var(--red);color:#fff}
-.help{flex:1 1 280px;min-width:0;font-size:14px;font-weight:600;line-height:1.35;text-align:right}
-main{flex:1;min-height:0;position:relative}
-iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--ink)}
-@media (max-width:760px){.bar{padding-block:8px;gap:6px 8px}.help{display:none}h1{flex-basis:100%}button{min-height:40px;padding:0 10px;font-size:14px;border-width:2px}.long{display:none}}
+html,body{height:100%;background:#111;overflow:hidden}
+body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+
+.stage{position:fixed;left:50%;top:50%;width:1600px;height:900px;transform-origin:0 0;background:var(--paper);overflow:hidden}
+.slide{position:absolute;inset:0;visibility:hidden;background:var(--paper)}
+.slide.active{visibility:visible}
+.grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:100px 100px;pointer-events:none}
+.abs{position:absolute}
+
+/* Tipografía */
+.big{font-family:'Archivo Black',Impact,sans-serif;line-height:.9;letter-spacing:-.035em;text-transform:uppercase}
+.red{color:var(--red)} .mute{color:var(--mute)}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.kicker{position:absolute;left:80px;top:140px;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.kicker b{color:var(--red)}
+.h{position:absolute;left:76px;top:180px;font-size:84px}
+.tx{font-size:22px;line-height:1.4}
+.tx b{font-weight:800} .tx p+p{margin-top:14px}
+.sm{font-size:19px;line-height:1.42}
+.tag{display:block;font:500 14px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+.tag.k{color:var(--mute)}
+.num{font-family:'Archivo Black',Impact,sans-serif;letter-spacing:-.03em;line-height:1}
+
+/* Bloques */
+.card{border:3px solid var(--ink);padding:20px 22px;background:var(--paper)}
+.card.redb{border-color:var(--red)}
+.card.fill{background:var(--ink);color:var(--paper)}
+.card.fill .tag{color:#FF6A5F}
+.step{position:relative}
+.step .n{width:54px;height:54px;background:var(--ink);color:#fff;display:grid;place-items:center;font:400 30px 'Archivo Black';margin-bottom:14px}
+.step.hot .n{background:var(--red)}
+.arrow{font:400 34px 'Archivo Black';color:var(--red);align-self:center}
+.chip{display:inline-block;font:500 16px 'JetBrains Mono',monospace;border:2px solid var(--ink);padding:3px 9px;margin:0 6px 8px 0}
+.chip.r{border-color:var(--red);color:var(--red)}
+.quote{border-left:10px solid var(--red);padding:6px 0 6px 24px;font-size:30px;font-weight:800;line-height:1.25}
+
+/* Barra de secciones */
+.route{position:absolute;left:80px;right:80px;top:44px}
+.route .segs,.route .nums{display:flex;gap:6px}
+.route .seg{flex:1;height:12px;background:#0A0A0A1F;position:relative;overflow:hidden}
+.route .seg i{position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left}
+.route .seg.done i{transform:scaleX(1)}
+.route .seg.now i{background:var(--red);transform:scaleX(var(--p,1));transition:transform .9s var(--ease) .15s}
+.route .nums span{flex:1;margin-top:9px;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#0A0A0A59}
+.route .nums span.done{color:var(--ink)} .route .nums span.now{color:var(--red);font-weight:800}
+.foot{position:absolute;left:80px;right:80px;bottom:30px;display:flex;justify-content:space-between;font:500 14px 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
+
+/* Figuras del paper */
+.fig{position:absolute;margin:0;background:#fff;border:3px solid var(--ink);padding:10px;cursor:zoom-in}
+.fig img{display:block;width:100%;height:auto}
+.fig figcaption{margin-top:8px;font:500 14px 'JetBrains Mono',monospace}
+.fig figcaption b{color:var(--red);font-weight:500}
+.zoom{position:fixed;inset:0;z-index:40;background:#0A0A0AF2;display:none;place-items:center;cursor:zoom-out;padding:3vh 3vw}
+.zoom.show{display:grid}
+.zoom img{max-width:100%;max-height:100%;background:#fff;padding:12px}
+
+/* Movimiento */
+.r{opacity:0;transform:translateY(26px);transition:opacity .6s var(--out),transform .8s var(--out);transition-delay:calc(var(--d,0)*1ms)}
+.slide.in .r{opacity:1;transform:none}
+.wipe{clip-path:inset(0 100% 0 0);transition:clip-path .9s var(--ease);transition-delay:calc(var(--d,0)*1ms)}
+.slide.in .wipe{clip-path:inset(-10% -5% -10% 0)}
+.bar{transform:scaleX(0);transform-origin:left;transition:transform 1.1s var(--ease);transition-delay:calc(var(--d,0)*1ms)}
+.slide.in .bar{transform:scaleX(1)}
+.vbar{transform:scaleY(0);transform-origin:top;transition:transform 1s var(--ease);transition-delay:calc(var(--d,0)*1ms)}
+.slide.in .vbar{transform:scaleY(1)}
+.mv{transition:transform 1.3s var(--out)}
+
+/* Notas */
+.notes{position:fixed;left:0;right:0;bottom:0;max-height:42vh;overflow:auto;background:#0A0A0AF2;color:#F4F2EE;padding:22px 32px 26px;font:16px/1.55 Archivo,sans-serif;transform:translateY(100%);transition:transform .45s var(--ease);z-index:20}
+.notes.show{transform:none}
+.notes h4{font:500 13px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#FF6A5F;margin-bottom:6px}
+.notes ul{margin:6px 0 0 18px} .notes li{margin-bottom:4px}
+.help{position:fixed;right:14px;bottom:10px;font:500 12px 'JetBrains Mono',monospace;color:#ffffff80;z-index:10;transition:opacity .4s}
+.help.hide{opacity:0}
+@media (prefers-reduced-motion:reduce){.r,.wipe,.bar,.vbar,.mv,.route .seg.now i{transition:none!important}}
 </style>
 </head>
 <body>
-<header class="bar">
-  <h1>Exposición <span>MDS</span></h1>
-  <div class="tabs" role="group" aria-label="Versión de la presentación">
-    <button id="tab-a" aria-pressed="true" data-src="version-a.html"><span class="long">Versión </span>A · Suiza</button>
-    <button id="tab-b" aria-pressed="false" data-src="constelaciones.html"><span class="long">Versión </span>B · Constelaciones</button>
+<div class="stage" id="stage">
+
+<!-- ===================== PORTADA ===================== -->
+<section class="slide" data-notes="Portada. Quien abre presenta al equipo y lanza la pregunta central del trabajo: ¿el escalamiento multidimensional sigue siendo fiel cuando se usan cientos o más de mil ítems? La animación de la derecha va de 4 a 1.024 ítems, el rango que usaron los autores.">
+  <div class="grid"></div>
+  <div class="abs" style="right:0;top:0;width:560px;height:900px;background:var(--ink)"></div>
+  <canvas id="cv0" class="abs" width="560" height="760" style="right:0;top:0;width:560px;height:760px"></canvas>
+  <div class="abs mono" style="right:40px;bottom:46px;left:1080px;color:#F4F2EE;font-size:15px;letter-spacing:.1em">ÍTEMS EN EL MAPA<div id="n0" class="num" style="font-size:96px;color:var(--red);margin-top:6px">4</div></div>
+  <div class="r abs" style="--d:150;left:80px;top:56px;width:880px;display:flex;justify-content:space-between;font-weight:600;font-size:18px;letter-spacing:.1em;text-transform:uppercase;border-bottom:4px solid var(--ink);padding-bottom:12px"><span>Análisis de Datos 2 · EAFIT</span><span>04/11/26</span></div>
+  <div class="vbar abs" style="--d:250;left:80px;top:150px;width:20px;height:420px;background:var(--red)"></div>
+  <h1 class="big wipe abs" style="--d:400;left:128px;top:150px;font-size:122px">¿El MDS<br>aguanta<br><span class="red">1.024</span><br>ítems?</h1>
+  <div class="r abs" style="--d:900;left:128px;top:608px;width:860px;font-size:23px;font-weight:800;line-height:1.25">Simulación de la fidelidad de los datos con conjuntos grandes de estímulos y estimación variable de la dimensionalidad en el escalamiento multidimensional</div>
+  <div class="r abs mono" style="--d:1000;left:128px;top:700px;font-size:15px;color:var(--mute)">Hout, Cunningham, Robbins &amp; MacDonald (2018) · SAGE Open · Profesor: Leonel Arango Vásquez</div>
+  <div class="r abs" style="--d:1150;left:128px;top:752px;width:880px;font-size:15px;line-height:1.6;font-weight:600"><span class="mono red" style="letter-spacing:.12em;font-weight:500">ADMINISTRACIÓN DE NEGOCIOS · CUARTO SEMESTRE</span><br>Sara Betancourth Álvarez · María Caballero Mestre · Mariana Cano Zuluaga · Miguel Escudero Pulgarín · Mateo Franco Cermeño · Camilo Hernández Zapata · María Marín Salazar · Sofia Muñoz Castillo · Emmanuel Ortiz Serna · Sofia Pelaez Perez</div>
+</section>
+
+<!-- ===================== 1 · CONTEXTO (a) ===================== -->
+<section class="slide" data-sec="1" data-scene="pairs" data-notes="<h4>Contexto · ¿qué problema intentaban resolver?</h4><ul><li>El escalamiento multidimensional (MDS) es una técnica estadística que permite obtener una representación gráfica de la similitud de diversos estímulos: muestra qué tan similares o distintos son unos de otros.</li><li>Se ha utilizado con conjuntos pequeños, normalmente entre 10 y 30 ítems.</li><li>Cuando aumenta la cantidad de estímulos aumenta notablemente el número de comparaciones. El paper dice que con 30 ítems se necesitan 435 comparaciones y para 60 se requieren 1.770.</li><li>La cuadrícula de la derecha dibuja cada comparación: negro hasta 30 ítems, rojo de 31 a 60.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>01</b> — Contexto de la investigación</div>
+  <h2 class="big h wipe" style="--d:250;font-size:80px">Comparar<br>todo con <span class="red">todo</span></h2>
+  <div class="tx r abs" style="--d:600;left:80px;top:420px;width:640px">
+    <p>El <b>escalamiento multidimensional (MDS)</b> muestra en un mapa qué tan <b>similares o distintos</b> son unos estímulos de otros.</p>
+    <p>Se ha usado con conjuntos pequeños: <b class="red">10 a 30 ítems</b>. Cada ítem nuevo se compara con todos los anteriores, así que las comparaciones crecen mucho más rápido que los ítems.</p>
   </div>
-  <button id="jump">Ir al video</button>
-  <p class="help">Vean las dos y decidan por el grupo. Clic en la presentación y luego ← → para pasar diapositivas. Los recuadros punteados son espacios por llenar.</p>
-</header>
-<main><iframe id="deck" title="Presentación" src="version-a.html" allow="autoplay; fullscreen" allowfullscreen></iframe></main>
+  <div class="r abs" style="--d:900;left:80px;top:700px;display:flex;gap:48px">
+    <div><span class="tag k">30 ítems</span><div class="num" style="font-size:54px">435</div></div>
+    <div><span class="tag">60 ítems</span><div class="num red" style="font-size:54px">1.770</div></div>
+    <div style="align-self:end;padding-bottom:8px" class="mono sm mute">comparaciones<br>(dato del paper)</div>
+  </div>
+  <div class="r abs" style="--d:400;left:920px;top:150px;width:600px">
+    <canvas id="cvPairs" width="600" height="560" style="width:600px;height:560px;display:block"></canvas>
+    <div style="display:flex;gap:44px;align-items:baseline;margin-top:6px">
+      <div><span class="tag k">Ítems</span><div class="num" id="pN" style="font-size:56px">10</div></div>
+      <div><span class="tag">Comparaciones</span><div class="num red" id="pP" style="font-size:56px">45</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 1 · CONTEXTO (b) ===================== -->
+<section class="slide" data-sec="1" data-notes="<h4>Contexto · ¿por qué era importante investigarlo?</h4><ul><li>A lo largo de los años han surgido métodos de recolección de datos de similitud más rápidos y ha mejorado la capacidad computacional: ya es posible trabajar con conjuntos grandes.</li><li>Pregunta importante: ¿el método sigue representando correctamente las relaciones cuando se usan cientos o incluso más de mil ítems? No era claro si con conjuntos grandes el análisis puede ser impreciso o puede reflejar un error en los datos.</li><li>Otro problema, la dimensionalidad: hay que decidir cuántas dimensiones necesita el mapa, y no es sencillo. Tampoco está claro qué ocurre si se usan menos o más de las necesarias.</li><li>Por eso estudian el efecto de 3 factores: número de ítems, nivel de error o ruido y estimación adecuada o inadecuada de la dimensionalidad. Simularon datos hasta con 1.024 ítems y contrastaron con espacios hipotéticos donde ya conocían la &quot;verdadera&quot; organización.</li><li>En simple: hoy se puede trabajar con conjuntos grandes gracias a las nuevas tecnologías; debemos saber si el método es útil y seguro.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>01</b> — Contexto de la investigación</div>
+  <h2 class="big h wipe" style="--d:250;font-size:92px">¿Y con <span class="red">cientos</span>?</h2>
+  <div class="abs" style="left:80px;right:80px;top:330px;display:grid;grid-template-columns:1fr 50px 1fr 50px 1.25fr;gap:0">
+    <div class="card r" style="--d:500"><span class="tag k">Antes</span><div class="tx"><b>10 a 30 ítems.</b> Pocas comparaciones, conjuntos manejables.</div></div>
+    <div class="arrow r" style="--d:650;text-align:center">→</div>
+    <div class="card r" style="--d:750"><span class="tag k">Ahora</span><div class="tx">Recolección <b>más rápida</b> y más <b>capacidad computacional</b>: ya se puede trabajar con conjuntos grandes.</div></div>
+    <div class="arrow r" style="--d:900;text-align:center">→</div>
+    <div class="card fill r" style="--d:1000"><span class="tag">La duda</span><div class="tx">¿El MDS sigue representando <b>correctamente</b> las relaciones con <b>cientos o más de mil</b> ítems, o el análisis se vuelve impreciso y refleja error en los datos?</div></div>
+  </div>
+  <div class="card redb r abs" style="--d:1200;left:80px;top:610px;width:700px"><span class="tag">Segundo problema · la dimensionalidad</span><div class="tx">¿Cuántas dimensiones necesita el mapa? No es sencillo decidirlo, y no está claro qué pasa si se usan <b>menos</b> o <b>más</b> de las necesarias.</div></div>
+  <div class="r abs" style="--d:1400;left:840px;top:610px;width:680px"><span class="tag k">Por eso estudian 3 factores</span>
+    <div style="margin-top:6px"><span class="chip">Nº de ítems</span><span class="chip">Ruido en los datos</span><span class="chip r">Dimensionalidad</span></div>
+    <div class="sm" style="margin-top:8px">Con simulaciones de hasta <b>1.024 ítems</b>, comparadas con espacios donde ya conocían la organización <b>verdadera</b>.</div></div>
+</section>
+
+<!-- ===================== 2 · OBJETIVO (a) ===================== -->
+<section class="slide" data-sec="2" data-notes="<h4>Objetivo · ¿qué buscaban conocer?</h4><ul><li>Los investigadores querían saber si el MDS sigue siendo confiable o fiel cuando se usan conjuntos grandes de estímulos, hasta 1.024 ítems y no solo 10 o 30, y ver cómo influyen el nivel de error de los datos y cuántas dimensiones elige el analista.</li><li>Desde la gestión, la pregunta es si entre más comparaciones se entrega un mejor resultado.</li><li>Para responder usaron simulación Monte Carlo: generaron datos artificiales, les agregaron errores como si fueran participantes y midieron qué tanto el MDS recuperaba la estructura original. Repitieron el experimento miles de veces.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>02</b> — Objetivo del estudio</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Más comparaciones,<br>¿mejor <span class="red">resultado</span>?</h2>
+  <div class="r abs" style="--d:600;left:80px;top:400px;width:1100px;font-size:30px;line-height:1.3;font-weight:400">Saber si el MDS sigue siendo <b>confiable o fiel</b> con conjuntos grandes, <b class="red">hasta 1.024 ítems</b> y no solo 10 o 30, y cómo influyen el <b>error de los datos</b> y <b>cuántas dimensiones elige el analista</b>.</div>
+  <div class="r abs" style="--d:850;left:80px;top:560px"><span class="tag">Cómo: simulación Monte Carlo</span></div>
+  <div class="abs" style="left:80px;right:80px;top:600px;display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr">
+    <div class="step r" style="--d:950"><div class="n">1</div><div class="tx sm"><b>Generar</b> datos artificiales</div></div>
+    <div class="arrow r" style="--d:1050">→</div>
+    <div class="step r" style="--d:1150"><div class="n">2</div><div class="tx sm"><b>Agregar errores</b>, como si fueran participantes</div></div>
+    <div class="arrow r" style="--d:1250">→</div>
+    <div class="step r" style="--d:1350"><div class="n">3</div><div class="tx sm"><b>Medir</b> qué tanto el MDS recupera la estructura original</div></div>
+    <div class="arrow r" style="--d:1450">→</div>
+    <div class="step hot r" style="--d:1550"><div class="n">4</div><div class="tx sm"><b>Repetir</b> miles de veces</div></div>
+  </div>
+</section>
+
+<!-- ===================== 2 · OBJETIVO (b) ===================== -->
+<section class="slide" data-sec="2" data-notes="<h4>Objetivo · lo que continúan y lo que superan</h4><ul><li>Esto continúa el trabajo de Young (1970), que tenía 3 limitaciones: solo llegaba a 30 ítems, repetía cada condición 5 veces y asumía que la dimensionalidad estaba bien elegida.</li><li>Los autores las superan con hasta 1.024 ítems, 500 repeticiones por condición y escenarios de dimensionalidad mal estimada.</li><li>Lo lograron cambiando el número de ítems (de 4 a 1.024), el nivel de error en los datos (desviación estándar de 1, de 5 y de 10) y la estimación de la dimensionalidad: correcta en el experimento 1, subestimada en el 2 y sobreestimada en el 3.</li><li>El diseño factorial combinó las categorías de cada factor: los autores no escogieron una sola configuración favorable, hicieron un análisis completo.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>02</b> — Objetivo del estudio</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Más allá de<br><span class="red">Young (1970)</span></h2>
+  <div class="r abs" style="--d:500;left:80px;top:390px;width:700px">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;border-bottom:4px solid var(--ink);padding-bottom:8px" class="mono sm"><span class="mute">LIMITACIÓN</span><span class="mute">YOUNG (1970)</span><span class="red">HOUT ET AL. (2018)</span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;border-bottom:2px solid var(--line);padding:16px 0;align-items:baseline"><span class="sm" style="font-weight:600">Ítems</span><span class="num" style="font-size:38px">30</span><span class="num red" style="font-size:38px">1.024</span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;border-bottom:2px solid var(--line);padding:16px 0;align-items:baseline"><span class="sm" style="font-weight:600">Repeticiones por condición</span><span class="num" style="font-size:38px">5</span><span class="num red" style="font-size:38px">500</span></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;padding:16px 0;align-items:baseline"><span class="sm" style="font-weight:600">Dimensionalidad</span><span class="tx" style="font-weight:800">asumida bien elegida</span><span class="tx red" style="font-weight:800">también mal estimada</span></div>
+  </div>
+  <div class="card r abs" style="--d:800;left:860px;top:390px;width:660px">
+    <span class="tag">Diseño factorial · los 3 factores</span>
+    <div class="sm" style="font-weight:800;margin:12px 0 6px">Nº de ítems</div>
+    <div><span class="chip">4</span><span class="chip">8</span><span class="chip">16</span><span class="chip">32</span><span class="chip">64</span><span class="chip">128</span><span class="chip">256</span><span class="chip">512</span><span class="chip">1.024</span></div>
+    <div class="sm" style="font-weight:800;margin:10px 0 6px">Error en los datos (desviación estándar)</div>
+    <div><span class="chip">1</span><span class="chip">5</span><span class="chip">10</span></div>
+    <div class="sm" style="font-weight:800;margin:10px 0 6px">Dimensionalidad</div>
+    <div><span class="chip">Exp. 1 · correcta</span><span class="chip">Exp. 2 · subestimada</span><span class="chip r">Exp. 3 · sobreestimada</span></div>
+  </div>
+  <div class="r abs quote" style="--d:1100;left:80px;top:745px;width:1440px;font-size:24px">No escogieron una sola configuración favorable: combinaron todas las categorías e hicieron un análisis completo.</div>
+</section>
+
+<!-- ===================== 3 · JUSTIFICACIÓN (a) ===================== -->
+<section class="slide" data-sec="3" data-scene="relational" data-notes="<h4>Justificación · ¿por qué una técnica multivariada?</h4><ul><li>El MDS toma proximidades (qué tan parecido o diferente es cada par de ítems) y produce un mapa espacial. La distancia entre 2 puntos representa la similitud: más cerca = más parecidos; más lejos = menos parecidos. El analista decide cuántas dimensiones tiene el mapa.</li><li>Es relacional y multivariado: un ítem no se define solo por un valor, sino por cómo se relaciona con todos los demás. La animación lo muestra: el ítem rojo queda ubicado por sus relaciones con los otros 11.</li><li>Comúnmente se usa en psicología con 10 a 30 estímulos (imágenes, palabras o rostros que se le presentan a una persona para que juzgue su parecido). Aquí querían saber si seguía funcionando hasta con 1.024.</li><li>Prácticamente el MDS no se usó para estudiar los estímulos: los estímulos sirvieron para estudiar la capacidad del MDS.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación de la técnica</div>
+  <h2 class="big h wipe" style="--d:250;font-size:92px">Cerca =<br><span class="red">parecido</span></h2>
+  <div class="tx r abs" style="--d:600;left:80px;top:410px;width:660px">
+    <p>El MDS toma <b>proximidades</b>, qué tan parecido o diferente es cada par de ítems, y produce un <b>mapa espacial</b>. La distancia entre dos puntos es su similitud. El analista decide cuántas dimensiones tiene el mapa.</p>
+    <p><span class="tag" style="margin:0 0 4px">Relacional y multivariado</span>Un ítem no se define por un valor, sino <b>por cómo se relaciona con todos los demás</b>.</p>
+  </div>
+  <svg id="svRel" class="abs" width="700" height="470" viewBox="0 0 700 470" style="left:820px;top:170px"></svg>
+  <div class="r abs quote" style="--d:1500;left:820px;top:680px;width:700px;font-size:25px">El MDS no se usó para estudiar los estímulos: <span class="red">los estímulos sirvieron para estudiar al MDS.</span></div>
+  <div class="r abs mono sm mute" style="--d:1600;left:80px;top:780px;width:680px;font-size:15px">En psicología: 10 a 30 estímulos (imágenes, palabras o rostros) que una persona juzga por su parecido</div>
+</section>
+
+<!-- ===================== 3 · JUSTIFICACIÓN (b) ===================== -->
+<section class="slide" data-sec="3" data-notes="<h4>Justificación · métrico y Monte Carlo</h4><ul><li>Usaron un MDS métrico, que utiliza números con distancias reales entre ellos (por ejemplo, calificándolas del 0 al 100). El no métrico usa solo el orden de mayor a menor.</li><li>Para probarlo usaron simulaciones Monte Carlo: un experimento que se repite muchas veces, generado por computador con datos aleatorios, y luego se mira qué pasa con el promedio.</li><li>Se hizo así porque con datos reales no se conoce el mapa verdadero. Crearon un espacio &quot;verdadero&quot;, le sumaron ruido aleatorio (imitando que no se califica perfectamente), corrieron el MDS y compararon.</li><li>Variaron la cantidad de ruido, el número de ítems y la dimensionalidad para ver cómo reaccionaba, repitiendo cada condición 500 veces.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación de la técnica</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Métrico y<br>por <span class="red">simulación</span></h2>
+  <div class="r abs" style="--d:500;left:80px;top:400px;width:640px">
+    <span class="tag">MDS métrico (el que usaron) vs. no métrico</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:10px;border-bottom:4px solid var(--ink);padding-bottom:8px" class="mono sm"><span class="mute">PAR</span><span class="red">MÉTRICO · 0–100</span><span class="mute">NO MÉTRICO · ORDEN</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:12px 0;border-bottom:2px solid var(--line);align-items:baseline"><span class="tx" style="font-weight:800">A – B</span><span class="num red" style="font-size:34px">20</span><span class="num" style="font-size:34px">1.º</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:12px 0;border-bottom:2px solid var(--line);align-items:baseline"><span class="tx" style="font-weight:800">B – C</span><span class="num red" style="font-size:34px">60</span><span class="num" style="font-size:34px">2.º</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:12px 0;align-items:baseline"><span class="tx" style="font-weight:800">A – C</span><span class="num red" style="font-size:34px">75</span><span class="num" style="font-size:34px">3.º</span></div>
+    <div class="sm mute" style="margin-top:10px">El métrico usa distancias reales; el no métrico, solo el orden de mayor a menor. <span class="mono" style="font-size:14px">(valores de ejemplo)</span></div>
+  </div>
+  <div class="r abs" style="--d:800;left:820px;top:400px;width:700px">
+    <span class="tag">Por qué Monte Carlo</span>
+    <div class="quote" style="font-size:26px;margin:8px 0 22px">Con datos reales <span class="red">no se conoce el mapa verdadero.</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card" style="padding:14px 16px"><span class="tag k">1 · Crear</span><div class="sm">un espacio <b>verdadero</b> conocido</div></div>
+      <div class="card" style="padding:14px 16px"><span class="tag k">2 · Ensuciar</span><div class="sm">sumarle <b>ruido aleatorio</b>: nadie califica perfecto</div></div>
+      <div class="card" style="padding:14px 16px"><span class="tag k">3 · Correr</span><div class="sm">el <b>MDS</b> sobre los datos con ruido</div></div>
+      <div class="card redb" style="padding:14px 16px"><span class="tag">4 · Comparar</span><div class="sm">el mapa obtenido <b>contra el verdadero</b></div></div>
+    </div>
+    <div class="sm" style="margin-top:14px">Variando ruido, ítems y dimensionalidad · <b class="red">500 repeticiones</b> por condición</div>
+  </div>
+</section>
+
+<!-- ===================== 4 · DATOS (a) ===================== -->
+<section class="slide" data-sec="4" data-scene="gen" data-notes="<h4>Datos utilizados · qué información analizaron</h4><ul><li>El estudio no trabajó con datos de personas reales: usó datos simulados por computador en MATLAB. Con datos reales nunca se sabe cuál es la respuesta correcta; al crear ellos mismos los datos pueden comparar y comprobar si el MDS la recupera.</li><li>Los datos se generaron en cuatro pasos (la animación los recorre):</li><li>1. Se ubicaron aleatoriamente los ítems en un espacio que cuenta como los datos reales, de entre 2 y 6 dimensiones.</li><li>2. Se simularon 10 participantes y a cada uno se le agregó un error, para simular a una persona que califica sin precisión.</li><li>3. Se calculó la distancia entre todos los pares de ítems para cada participante.</li><li>4. Esos resultados se promediaron entre los 10 participantes: con ese resultado se corrió el MDS.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>04</b> — Datos utilizados</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Participantes<br>que <span class="red">no existen</span></h2>
+  <div class="tx r abs" style="--d:500;left:880px;top:190px;width:640px"><b>Datos simulados en MATLAB</b>, no personas reales. Con datos reales nunca se sabe cuál es la respuesta correcta; al crearlos, se puede <b class="red">comprobar si el MDS la recupera</b>.</div>
+  <svg id="svGen" class="abs" width="1440" height="300" viewBox="0 0 1440 300" style="left:80px;top:400px"></svg>
+  <div class="abs" style="left:80px;right:80px;top:710px;display:grid;grid-template-columns:repeat(4,1fr);gap:40px">
+    <div class="r" style="--d:700"><span class="tag k">Paso 1</span><div class="sm">Ítems ubicados <b>al azar</b> en un espacio &quot;verdadero&quot; de <b>2 a 6 dimensiones</b></div></div>
+    <div class="r" style="--d:1500"><span class="tag k">Paso 2</span><div class="sm"><b>10 participantes</b> simulados, cada uno con su propio <b>error</b></div></div>
+    <div class="r" style="--d:2300"><span class="tag k">Paso 3</span><div class="sm">Distancia entre <b>todos los pares</b> de ítems, para cada participante</div></div>
+    <div class="r" style="--d:3100"><span class="tag">Paso 4</span><div class="sm"><b>Promedio de los 10</b>: con eso se corre el MDS</div></div>
+  </div>
+</section>
+
+<!-- ===================== 4 · DATOS (b) ===================== -->
+<section class="slide" data-sec="4" data-scene="count" data-notes="<h4>Datos utilizados · variables y unidades de análisis</h4><ul><li>Para poner a prueba el MDS cambiaron: la cantidad de ítems (de 4 a 1.024), el nivel de error en los datos, qué tan complejo era el espacio verdadero (las dimensiones que tenía) y el número de dimensiones que usó el MDS al analizarlo. Así probaron qué pasaba con el número correcto de dimensiones, con menos o con más de las necesarias.</li><li>Para evaluar los resultados midieron la determinación (qué tanto se parecen el mapa del MDS y el espacio verdadero) y la correspondencia (compara los datos antes de aplicar el MDS con el espacio verdadero).</li><li>Las unidades de análisis son los ítems, ubicados como puntos en un mapa. Para medir qué tan bien funcionó compararon las distancias entre pares de ítems.</li><li>Cada combinación se repitió 500 veces y los resultados se presentan como promedio. En total, 337.500 experimentos simulados: 67.500 en el primero y 135.000 en cada uno de los otros dos.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>04</b> — Datos utilizados</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Qué se varió,<br>qué se <span class="red">midió</span></h2>
+  <div class="r abs" style="--d:500;left:80px;top:390px;width:600px">
+    <span class="tag">Variables</span>
+    <div class="sm" style="border-top:3px solid var(--ink);padding:10px 0"><b>Cantidad de ítems</b> · 4 a 1.024</div>
+    <div class="sm" style="border-top:2px solid var(--line);padding:10px 0"><b>Nivel de error</b> en los datos</div>
+    <div class="sm" style="border-top:2px solid var(--line);padding:10px 0"><b>Dimensiones del espacio verdadero</b> · 2 a 6</div>
+    <div class="sm" style="border-top:2px solid var(--line);padding:10px 0"><b>Dimensiones que usa el MDS</b> · correctas, menos o más</div>
+    <span class="tag" style="margin-top:14px">Unidad de análisis</span>
+    <div class="sm">Los <b>ítems</b>, como puntos del mapa. Se comparan las <b>distancias entre pares</b>.</div>
+  </div>
+  <svg class="r abs" style="--d:800;left:760px;top:380px" width="760" height="250" viewBox="0 0 760 250">
+    <rect x="0" y="20" width="220" height="90" fill="none" stroke="#0A0A0A" stroke-width="3"/>
+    <text x="110" y="58" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="19">Datos promedio</text>
+    <text x="110" y="84" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#0A0A0A99">antes del MDS</text>
+    <rect x="270" y="150" width="220" height="90" fill="#0A0A0A"/>
+    <text x="380" y="190" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="19" fill="#F4F2EE">Espacio verdadero</text>
+    <text x="380" y="216" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#F4F2EE99">lo que se creó</text>
+    <rect x="540" y="20" width="220" height="90" fill="none" stroke="#E10600" stroke-width="3"/>
+    <text x="650" y="58" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="19" fill="#E10600">Mapa del MDS</text>
+    <text x="650" y="84" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#E1060099">lo que se obtuvo</text>
+    <line x1="150" y1="112" x2="300" y2="148" stroke="#0A0A0A" stroke-width="3"/>
+    <line x1="610" y1="112" x2="460" y2="148" stroke="#E10600" stroke-width="5"/>
+    <text x="120" y="150" text-anchor="middle" font-family="Archivo Black" font-size="17">CORRESPONDENCIA</text>
+    <text x="645" y="150" text-anchor="middle" font-family="Archivo Black" font-size="17" fill="#E10600">DETERMINACIÓN</text>
+  </svg>
+  <div class="r abs sm" style="--d:1000;left:760px;top:640px;width:760px"><b class="red">Determinación:</b> qué tanto se parece el mapa del MDS al espacio verdadero. <b>Correspondencia:</b> los datos antes del MDS frente al verdadero.</div>
+  <div class="r abs" style="--d:1200;left:80px;top:735px;width:1440px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="tag" style="margin:0">500 repeticiones por combinación · total de experimentos</span><span class="num" id="cnt" style="font-size:44px">0</span></div>
+    <div style="display:flex;height:34px;margin-top:8px;font:500 14px 'JetBrains Mono',monospace;color:#fff">
+      <div class="bar" style="--d:1300;flex:67500;background:var(--ink);display:flex;align-items:center;padding-left:10px">EXP. 1 · 67.500</div>
+      <div class="bar" style="--d:1500;flex:135000;background:#555;display:flex;align-items:center;padding-left:10px;margin-left:4px">EXP. 2 · 135.000</div>
+      <div class="bar" style="--d:1700;flex:135000;background:var(--red);display:flex;align-items:center;padding-left:10px;margin-left:4px">EXP. 3 · 135.000</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5 · RESULTADOS (a) ===================== -->
+<section class="slide" data-sec="5" data-notes="<h4>Resultados · cómo se generó y cómo se midió</h4><ul><li>La simulación tuvo 4 pasos. Primero se generaron coordenadas &quot;verdaderas&quot; con distribución uniforme entre −5 y 5, en 2 a 6 dimensiones, con una desviación estándar de unas 2,89 unidades.</li><li>Luego se simularon 10 participantes sumando a esas coordenadas un ruido de distribución normal, con desviaciones estándar de 1, de 5 y de 10. Con ruido de 10 el error es más de 3 veces la dispersión de los datos reales: un escenario muy adverso (las barras lo muestran a escala).</li><li>Se calcularon las distancias euclidianas entre todos los pares para cada participante y se promediaron entre los 10, lo que reduce parte del ruido. Al final se aplicó MDS métrico con la función mdscale de MATLAB, que acomoda los puntos para que sus distancias se parezcan lo más posible a las de entrada.</li><li>Para medirlo existe el stress (desajuste del mapa), pero los autores no lo reportan porque ya se sabe que sube con más ítems y más ruido.</li><li>Su indicador central es la determinación: el R² (correlación de Pearson al cuadrado) entre los vectores de distancias de la solución MDS y las distancias &quot;verdaderas&quot;. Se interpreta igual que en la regresión, como % de varianza explicada. Como control usan la correspondencia, que compara los datos crudos promediados (antes del MDS) con las distancias verdaderas.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>05</b> — Resultados principales</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Un escenario<br>muy <span class="red">adverso</span></h2>
+  <div class="r abs" style="--d:500;left:80px;top:390px;width:780px">
+    <span class="tag">Dispersión real vs. ruido agregado (desviación estándar, a escala)</span>
+    <div style="display:grid;grid-template-columns:190px 1fr;gap:12px 16px;align-items:center;margin-top:14px" class="sm">
+      <b>Datos reales</b><div class="bar" style="--d:700;height:34px;width:calc(2.89/10*100%);background:var(--ink);color:#fff;font:500 15px 'JetBrains Mono';display:flex;align-items:center;padding-left:8px;white-space:nowrap">≈ 2,89</div>
+      <span>Ruido 1</span><div class="bar" style="--d:900;height:34px;width:10%;background:#E1060055;font:500 15px 'JetBrains Mono';display:flex;align-items:center;padding-left:8px">1</div>
+      <span>Ruido 5</span><div class="bar" style="--d:1100;height:34px;width:50%;background:#E10600AA;color:#fff;font:500 15px 'JetBrains Mono';display:flex;align-items:center;padding-left:8px">5</div>
+      <span><b class="red">Ruido 10</b></span><div class="bar" style="--d:1300;height:34px;width:100%;background:var(--red);color:#fff;font:500 15px 'JetBrains Mono';display:flex;align-items:center;padding-left:8px">10 · más de 3 veces la dispersión real</div>
+    </div>
+    <div class="sm" style="margin-top:22px">Coordenadas verdaderas <b>uniformes entre −5 y 5</b> · ruido <b>normal</b> por participante · distancias euclidianas <b>promediadas entre 10</b>, lo que reduce parte del ruido · MDS métrico con <span class="mono" style="font-size:16px">mdscale</span> de MATLAB.</div>
+  </div>
+  <div class="r abs" style="--d:1000;left:940px;top:390px;width:580px">
+    <div class="card" style="margin-bottom:16px"><span class="tag k">Stress · no se reporta</span><div class="sm">Es el desajuste del mapa. Ya se sabe que <b>sube con más ítems y más ruido</b>, así que no dice si el mapa es fiel.</div></div>
+    <div class="card fill"><span class="tag">Indicador central · determinación</span><div class="sm"><b>R²</b> (correlación de Pearson al cuadrado) entre las distancias del MDS y las <b>verdaderas</b>. Se lee como en la regresión: <b>% de varianza explicada</b>.</div></div>
+    <div class="sm mute" style="margin-top:12px">Control: <b style="color:var(--ink)">correspondencia</b>, los datos crudos promediados frente a los verdaderos.</div>
+  </div>
+</section>
+
+<!-- ===================== 5 · RESULTADOS (b) EXP 1 ===================== -->
+<section class="slide" data-sec="5" data-notes="<h4>Resultados · experimento 1, Figura 1</h4><ul><li>Dimensionalidad correcta: se escaló con las mismas dimensiones con las que se creó el espacio verdadero.</li><li>Ruido bajo (panel izquierdo): la determinación es muy alta y se mantiene estable, cerca de 0,96 a 0,97.</li><li>Ruido medio y alto: aparece una curva en U. La determinación baja hasta unos 16 ítems y luego sube de forma sostenida, hasta más o menos 0,48 con ruido 5 y alrededor de 0,12 con ruido 10 en 1.024 ítems.</li><li>Con 4 u 8 ítems los valores son poco estables porque salen de solo 6 y 28 pares.</li><li>Ojo: cada panel tiene su propia escala en el eje Y (1,00 / 0,70 / 0,30). Las líneas son las dimensiones (2 a 6). Clic en la figura para ampliarla.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>05</b> — Resultados · Experimento 1 · dimensiones correctas</div>
+  <h2 class="big h wipe" style="--d:250;font-size:80px">Baja hasta 16,<br>luego <span class="red">sube</span></h2>
+  <figure class="fig r" data-zoom="img/fig1.png" data-stop style="--d:450;left:80px;top:380px;width:1000px"><img src="img/fig1.png" alt="Figura 1 del paper: determinación según número de ítems, con error 1, 5 y 10"><figcaption><b>Figura 1</b> · Determinación vs. nº de ítems · error 1, 5 y 10 · cada eje Y tiene su propia escala · clic para ampliar</figcaption></figure>
+  <div class="abs" style="left:1120px;top:380px;width:400px">
+    <div class="r" style="--d:800;border-top:4px solid var(--ink);padding:10px 0 14px"><span class="tag k">Ruido 1</span><div class="sm">Muy alta y estable</div><div class="num" style="font-size:40px">≈ 0,96–0,97</div></div>
+    <div class="r" style="--d:1000;border-top:4px solid var(--red);padding:10px 0 14px"><span class="tag">Ruido 5</span><div class="sm">Curva en U: baja hasta ~16 ítems, luego sube</div><div class="num red" style="font-size:40px">≈ 0,48 <span class="sm mono mute" style="font-size:15px">con 1.024</span></div></div>
+    <div class="r" style="--d:1200;border-top:4px solid var(--red);padding:10px 0 14px"><span class="tag">Ruido 10</span><div class="sm">La misma U, más abajo</div><div class="num red" style="font-size:40px">≈ 0,12 <span class="sm mono mute" style="font-size:15px">con 1.024</span></div></div>
+    <div class="r sm" style="--d:1400;background:var(--soft);padding:12px 14px">Con <b>4 u 8 ítems</b> los valores son poco estables: salen de solo <b>6 y 28 pares</b>.</div>
+  </div>
+</section>
+
+<!-- ===================== 5 · RESULTADOS (c) VIGAS ===================== -->
+<section class="slide" data-sec="5" data-scene="beams" data-notes="<h4>Resultados · por qué mejora con más ítems</h4><ul><li>La correspondencia, por el contrario, empeora con más ítems y más con un ruido alto.</li><li>Esto demuestra que la mejora de la determinación viene de aplicar el MDS y no de los datos crudos.</li><li>Razón: cada ítem se ubica con n − 1 comparaciones, entonces el error de un par pesa menos en la ubicación final del ítem.</li><li>Los autores lo comparan con una estructura de vigas y juntas: con más juntas, una dañada va a pesar menos. La animación lo muestra: la misma viga dañada mueve mucho el punto con 3 apoyos y casi nada con 12.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>05</b> — Resultados · Experimento 1</div>
+  <h2 class="big h wipe" style="--d:250;font-size:80px">La mejora la<br>pone <span class="red">el MDS</span></h2>
+  <div class="abs" style="left:80px;top:390px;width:620px">
+    <div class="card fill r" style="--d:500;margin-bottom:14px;display:grid;grid-template-columns:60px 1fr;align-items:center"><span class="num red" style="font-size:52px">↑</span><div><span class="tag">Determinación</span><div class="sm">mapa del MDS vs. verdadero: <b>sube</b> con más ítems, pasados ~16</div></div></div>
+    <div class="card r" style="--d:800;margin-bottom:18px;display:grid;grid-template-columns:60px 1fr;align-items:center"><span class="num" style="font-size:52px">↓</span><div><span class="tag k">Correspondencia</span><div class="sm">datos crudos vs. verdadero: <b>empeora</b> con más ítems, y más con ruido alto</div></div></div>
+    <div class="r tx" style="--d:1100">Si los datos crudos empeoran y el mapa mejora, <b class="red">la mejora no viene de los datos: viene de aplicar el MDS.</b></div>
+  </div>
+  <svg id="svBeam" class="abs" width="780" height="400" viewBox="0 0 780 400" style="left:760px;top:170px"></svg>
+  <div class="r abs" style="--d:1300;left:760px;top:600px;width:760px">
+    <span class="tag">Vigas y juntas</span>
+    <div class="tx">Cada ítem se ubica con <b>n − 1 comparaciones</b>. Con más juntas, una dañada pesa menos: <b>el error de un par mueve menos la ubicación final.</b></div>
+  </div>
+</section>
+
+<!-- ===================== 5 · RESULTADOS (d) EXP 2 Y 3 ===================== -->
+<section class="slide" data-sec="5" data-notes="<h4>Resultados · experimentos 2 y 3, Figuras 3 y 4</h4><ul><li>Experimento 2, subestimar (usar menos dimensiones de las necesarias): la determinación es más baja que en el experimento 1. Con ruido bajo, agregar ítems siempre perjudica; con ruido medio y alto aparece la curva en U, y si se pasa de unos 16 ítems la determinación se estabiliza o sube un poco.</li><li>Experimento 3, sobreestimar: casi no hay daño. Con ruido bajo la determinación queda plana y con ruido alto sube de forma constante después de 16 ítems.</li><li>Los autores recomiendan equivocarse por exceso y no por defecto.</li><li>Hay que tener en cuenta que el ruido reduce la determinación en los 3 experimentos, pero la dimensionalidad casi no afecta.</li><li>Cómo leer las figuras: filas = nivel de error (1, 5, 10); columnas = dimensiones verdaderas; símbolos = dimensiones que usó el MDS. El recuadro rojo marca la fila de ruido bajo: en la Fig. 3 las líneas caen, en la Fig. 4 quedan planas.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>05</b> — Resultados · Experimentos 2 y 3 · dimensiones mal estimadas</div>
+  <h2 class="big h wipe" style="--d:250;font-size:72px">Mejor pasarse que<br>quedarse <span class="red">corto</span></h2>
+  <div class="r abs" style="--d:500;left:1060px;top:190px;width:460px;border-left:8px solid var(--red);padding-left:18px"><span class="tag">Recomendación de los autores</span><div class="tx" style="font-weight:800">Equivocarse por exceso, no por defecto.</div><div class="sm mute" style="margin-top:6px">El ruido reduce la determinación en los 3 experimentos.</div></div>
+  <div class="abs" style="left:80px;top:350px;width:700px">
+    <div class="r" style="--d:700"><span class="tag">Exp. 2 · subestimar (menos dimensiones)</span><div class="sm">Determinación <b>más baja</b> que en el Exp. 1. Con ruido bajo, <b>agregar ítems siempre perjudica</b>; con ruido medio y alto, curva en U y desde ~16 se estabiliza o sube un poco.</div></div>
+    <figure class="fig r" data-zoom="img/fig3.png" data-stop style="--d:900;position:relative;margin-top:14px;width:450px"><img src="img/fig3.png" alt="Figura 3 del paper: experimento 2"><figcaption><b>Figura 3</b> · Exp. 2 · clic para ampliar</figcaption><div class="wipe" style="--d:1500;position:absolute;left:4px;top:4px;right:4px;height:30%;border:5px solid var(--red)"></div></figure>
+  </div>
+  <div class="abs" style="left:820px;top:350px;width:700px">
+    <div class="r" style="--d:1100"><span class="tag">Exp. 3 · sobreestimar (más dimensiones)</span><div class="sm"><b>Casi no hay daño.</b> Con ruido bajo la determinación queda <b>plana</b>; con ruido alto <b>sube</b> de forma constante después de 16 ítems.</div></div>
+    <figure class="fig r" data-zoom="img/fig4.png" data-stop style="--d:1300;position:relative;margin-top:14px;width:450px"><img src="img/fig4.png" alt="Figura 4 del paper: experimento 3"><figcaption><b>Figura 4</b> · Exp. 3 · clic para ampliar</figcaption><div class="wipe" style="--d:1700;position:absolute;left:4px;top:4px;right:4px;height:30%;border:5px solid var(--red)"></div></figure>
+  </div>
+</section>
+
+<!-- ===================== 5 · RESULTADOS (e) GERENTE ===================== -->
+<section class="slide" data-sec="5" data-notes="<h4>Resultados · la lectura de gestión, Figura 5</h4><ul><li>Un gerente que mira solo el stress diría que con más ítems el mapa empeora, pero estaría confundiendo ajuste con fidelidad.</li><li>Tampoco está bien concluir lo contrario (más ítems siempre es mejor): con ruido alto la determinación sigue baja, cerca de 0,12, y la razón información/costo cae hasta alrededor de 100 ítems, como lo muestra la Figura 5.</li><li>Figura 5, de izquierda a derecha: comparaciones necesarias para llenar la matriz (crecen muy rápido), información obtenida por ítem (crece en línea recta) y la razón información / comparaciones (cae fuerte y se aplana).</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>05</b> — Resultados · lectura para un gerente</div>
+  <h2 class="big h wipe" style="--d:250;font-size:80px">Ajuste ≠<br><span class="red">fidelidad</span></h2>
+  <div class="abs" style="left:640px;top:180px;right:80px;display:grid;grid-template-columns:1fr 1fr;gap:24px">
+    <div class="card r" style="--d:500"><span class="tag">✗ Error 1</span><div class="sm" style="font-weight:800">&quot;El stress sube con más ítems: el mapa empeora&quot;</div><div class="sm" style="margin-top:8px">Confunde <b>ajuste</b> con <b>fidelidad</b>.</div></div>
+    <div class="card r" style="--d:800"><span class="tag">✗ Error 2</span><div class="sm" style="font-weight:800">&quot;Entonces más ítems siempre es mejor&quot;</div><div class="sm" style="margin-top:8px">Con ruido alto la determinación sigue <b>≈ 0,12</b>, y la razón <b>información/costo cae hasta ~100 ítems</b>.</div></div>
+  </div>
+  <figure class="fig r" data-zoom="img/fig5.png" data-stop style="--d:1100;left:80px;top:410px;width:1060px"><img src="img/fig5.png" alt="Figura 5 del paper: comparaciones necesarias, información por ítem y razón información sobre comparaciones"><figcaption><b>Figura 5</b> · comparaciones necesarias · información por ítem · razón información / comparaciones · clic para ampliar</figcaption></figure>
+  <div class="abs" style="left:1190px;top:410px;width:330px">
+    <div class="r" style="--d:1300;border-top:4px solid var(--ink);padding-top:8px;margin-bottom:18px"><span class="tag k">Izquierda</span><div class="sm">Las comparaciones <b>se disparan</b></div></div>
+    <div class="r" style="--d:1450;border-top:4px solid var(--ink);padding-top:8px;margin-bottom:18px"><span class="tag k">Centro</span><div class="sm">La información por ítem crece <b>en línea recta</b></div></div>
+    <div class="r" style="--d:1600;border-top:4px solid var(--red);padding-top:8px"><span class="tag">Derecha</span><div class="sm">Lo que se gana por comparación <b class="red">cae</b> hasta ~100 ítems</div></div>
+  </div>
+</section>
+
+<!-- ===================== 5 · RESULTADOS (f) INCONSISTENCIA ===================== -->
+<section class="slide" data-sec="5" data-notes="<h4>Resultados · lo que encontramos nosotros</h4><ul><li>Una inconsistencia que se encontró: el texto del paper define la determinación frente a las distancias verdaderas, pero el código del Apéndice la calcula contra las distancias simuladas promedio.</li><li>Si el profe pregunta por qué importa: son dos comparaciones distintas. Contra las verdaderas mide fidelidad al mapa real; contra las simuladas promedio mide qué tanto el MDS reproduce los datos que recibió.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>05</b> — Resultados · lo que encontramos</div>
+  <h2 class="big h wipe" style="--d:250;font-size:92px">Una <span class="red">inconsistencia</span></h2>
+  <div class="abs" style="left:80px;right:80px;top:380px;display:grid;grid-template-columns:1fr 120px 1fr;align-items:stretch">
+    <div class="card r" style="--d:500;padding:30px"><span class="tag k">El texto del paper</span><div class="tx" style="font-size:26px;margin-top:8px">Define la determinación frente a las <b>distancias verdaderas</b></div><div class="mono" style="font-size:22px;margin-top:22px">R²( MDS , <b>verdaderas</b> )</div></div>
+    <div class="num red r" style="--d:800;font-size:110px;display:grid;place-items:center">≠</div>
+    <div class="card fill r" style="--d:1000;padding:30px"><span class="tag">El código del Apéndice</span><div class="tx" style="font-size:26px;margin-top:8px">La calcula contra las <b>distancias simuladas promedio</b></div><div class="mono" style="font-size:22px;margin-top:22px">R²( MDS , <b style="color:#FF6A5F">simuladas promedio</b> )</div></div>
+  </div>
+  <div class="r abs" style="--d:1300;left:80px;top:660px;width:1440px;display:grid;grid-template-columns:1fr 120px 1fr">
+    <div class="sm"><span class="tag k">Qué mediría</span>Qué tan fiel es el mapa al <b>espacio real</b> que se creó</div><div></div>
+    <div class="sm"><span class="tag">Qué mediría</span>Qué tan bien el MDS reproduce <b>los datos que recibió</b>, ya con ruido</div>
+  </div>
+</section>
+
+<!-- ===================== 6 · EMPRESA (a) ===================== -->
+<section class="slide" data-sec="6" data-notes="<h4>Aplicación empresarial · el problema</h4><ul><li>La principal utilidad del MDS es transformar datos complejos en una representación visual que facilite el análisis y la toma de decisiones.</li><li>Caso: una cadena de retail colombiana (un supermercado o una tienda de moda) con 300 productos en su línea de marca propia.</li><li>Pregunta estratégica de la gerencia: ¿cómo perciben los clientes estos productos frente a la competencia y dónde hay espacios en el mercado que nadie está atendiendo?</li><li>El número de comparaciones es un cálculo nuestro con la fórmula de pares: 300 × 299 / 2 = 44.850. Sirve para mostrar el costo que menciona el documento.</li></ul>">
+  <div class="grid"></div>
+  <div class="abs" style="left:1100px;top:140px;width:420px;height:680px;overflow:hidden"><img src="img/empresa-supermercado.jpg" alt="Pasillo de supermercado" style="width:100%;height:100%;object-fit:cover;object-position:45% 50%;filter:grayscale(1) contrast(1.1)"></div>
+  <div class="kicker r" style="--d:100"><b>06</b> — Aplicación empresarial</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">300 productos,<br>¿cómo los <span class="red">ven</span>?</h2>
+  <div class="tx r abs" style="--d:500;left:80px;top:400px;width:900px">Una <b>cadena de retail colombiana</b>, un supermercado o una tienda de moda, con <b class="red">300 productos de marca propia</b>.</div>
+  <div class="r abs quote" style="--d:800;left:80px;top:500px;width:900px;font-size:28px">¿Cómo perciben los clientes estos productos frente a la competencia, y <span class="red">dónde hay espacios que nadie está atendiendo</span>?</div>
+  <div class="r abs" style="--d:1100;left:80px;top:690px;width:900px;display:flex;gap:50px;align-items:end">
+    <div><span class="tag k">Productos</span><div class="num" style="font-size:60px">300</div></div>
+    <div><span class="tag">Pares a comparar · 300 × 299 / 2</span><div class="num red" style="font-size:60px">44.850</div></div>
+  </div>
+</section>
+
+<!-- ===================== 6 · EMPRESA (b) ===================== -->
+<section class="slide" data-sec="6" data-scene="brand" data-notes="<h4>Aplicación empresarial · cómo funciona</h4><ul><li>Mediante encuestas y comparaciones entre marcas, la empresa construye una matriz de similitudes, que después se transforma en un mapa multidimensional.</li><li>Mapa perceptual: cada producto es un punto, y los productos que los clientes ven como parecidos quedan cerca.</li><li>Así la empresa puede ver qué productos compiten entre sí y canibalizan ventas, qué marcas ocupan la misma posición (competidores cercanos) y dónde hay zonas vacías, que son oportunidad para un producto nuevo o para diferenciarse.</li><li>El mapa de la derecha es un ejemplo ilustrativo, no datos reales.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>06</b> — Aplicación empresarial</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">De la encuesta<br>al <span class="red">mapa</span></h2>
+  <div class="abs" style="left:80px;top:400px;width:640px">
+    <div class="step r" style="--d:500;display:grid;grid-template-columns:70px 1fr;align-items:center;margin-bottom:18px"><div class="n" style="margin:0">1</div><div class="sm"><b>Encuestas y comparaciones</b> entre productos y marcas</div></div>
+    <div class="step r" style="--d:700;display:grid;grid-template-columns:70px 1fr;align-items:center;margin-bottom:18px"><div class="n" style="margin:0">2</div><div class="sm">Una <b>matriz de similitudes</b>: qué tan parecido es cada par</div></div>
+    <div class="step r" style="--d:900;display:grid;grid-template-columns:70px 1fr;align-items:center;margin-bottom:18px"><div class="n" style="margin:0">3</div><div class="sm">El MDS la convierte en un <b>mapa perceptual</b>: cerca = parecidos para el cliente</div></div>
+    <div class="step hot r" style="--d:1100;display:grid;grid-template-columns:70px 1fr;align-items:center"><div class="n" style="margin:0">4</div><div class="sm">Se lee el mapa: <b>canibalización</b>, <b>competidores cercanos</b> y <b class="red">zonas vacías</b></div></div>
+  </div>
+  <svg id="svBrand" class="abs" width="620" height="482" viewBox="0 0 720 560" style="left:900px;top:200px"></svg>
+  <div class="r abs mono" style="--d:1400;left:900px;top:700px;font-size:14px;color:var(--mute)">EJEMPLO ILUSTRATIVO · no son datos reales</div>
+</section>
+
+<!-- ===================== 6 · EMPRESA (c) ===================== -->
+<section class="slide" data-sec="6" data-notes="<h4>Aplicación empresarial · qué cuidar y qué decidir</h4><ul><li>Tradicionalmente el MDS se ha usado con pocos productos, por la preocupación de que más elementos reduzcan la confiabilidad. El artículo muestra que trabajar con conjuntos más grandes puede mejorar la capacidad del MDS de representar la estructura real, siempre que se estime adecuadamente la dimensionalidad y se controle la calidad de los datos.</li><li>Subestimar la dimensionalidad puede perjudicar la representación de las relaciones entre productos. Respuestas inconsistentes, errores de medición y ruido afectan los resultados.</li><li>Analizar más productos también aumenta las comparaciones y el tiempo de recolección: hay que encontrar un equilibrio entre amplitud del análisis, calidad de la información y recursos.</li><li>Con los resultados, la empresa podría ajustar sus estrategias de marketing, reposicionar su marca, modificar productos, organizar mejor su surtido, desarrollar productos nuevos o alimentar sistemas de recomendación.</li><li>Después debe evaluar el impacto con ventas, retención de clientes, satisfacción y desempeño de los productos.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>06</b> — Aplicación empresarial</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Qué cuidar,<br>qué <span class="red">decidir</span></h2>
+  <div class="abs" style="left:80px;right:80px;top:390px;display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:24px">
+    <div class="card r" style="--d:500"><span class="tag">Lo que aporta el paper</span><div class="sm">Más productos <b>pueden mejorar</b> el mapa, siempre que:</div>
+      <div class="sm" style="margin-top:10px;border-top:2px solid var(--line);padding-top:8px"><b>Se estime bien la dimensionalidad</b>: subestimarla perjudica</div>
+      <div class="sm" style="margin-top:8px;border-top:2px solid var(--line);padding-top:8px"><b>Se cuide la calidad de los datos</b>: respuestas inconsistentes, errores de medición y ruido</div></div>
+    <div class="card redb r" style="--d:750"><span class="tag">El costo</span><div class="sm">Más productos = <b>más comparaciones</b> y más tiempo de recolección.</div>
+      <div class="sm" style="margin-top:12px">Hay que equilibrar:</div>
+      <div style="margin-top:8px"><span class="chip">amplitud</span><span class="chip">calidad</span><span class="chip">recursos</span></div></div>
+    <div class="card fill r" style="--d:1000"><span class="tag">Decisiones</span>
+      <div class="sm">Ajustar el marketing · reposicionar la marca · modificar productos · organizar el surtido · desarrollar productos nuevos · alimentar sistemas de recomendación</div>
+      <span class="tag" style="margin-top:16px">Y medir el impacto</span>
+      <div><span class="chip" style="border-color:#F4F2EE">ventas</span><span class="chip" style="border-color:#F4F2EE">retención</span><span class="chip" style="border-color:#F4F2EE">satisfacción</span><span class="chip" style="border-color:#F4F2EE">desempeño</span></div></div>
+  </div>
+</section>
+
+<!-- ===================== REFERENCIAS ===================== -->
+<section class="slide" data-notes="Referencias en APA 7. Las figuras 1, 3, 4 y 5 son del paper de Hout et al. (2018).">
+  <div class="grid"></div>
+  <div class="vbar abs" style="--d:100;left:80px;top:80px;width:20px;height:190px;background:var(--red)"></div>
+  <h2 class="big wipe abs" style="--d:200;left:128px;top:80px;font-size:110px">Referencias</h2>
+  <div class="r abs" style="--d:500;left:128px;top:330px;width:1300px;font-size:24px;line-height:1.5;padding-left:2em;text-indent:-2em">Hout, M. C., Cunningham, C. A., Robbins, A., &amp; MacDonald, J. (2018). Simulating the fidelity of data for large stimulus set sizes and variable dimension estimation in multidimensional scaling. <i>SAGE Open, 8</i>(2). <span class="mono" style="font-size:19px">https://doi.org/10.1177/2158244018773143</span></div>
+  <div class="r abs" style="--d:700;left:128px;top:480px;width:1300px;font-size:24px;line-height:1.5;padding-left:2em;text-indent:-2em">Young, F. W. (1970). Nonmetric multidimensional scaling: Recovery of metric information. <i>Psychometrika, 35</i>(4), 455–473. <span class="mono" style="font-size:19px">https://doi.org/10.1007/BF02291820</span></div>
+  <div class="r abs mono" style="--d:900;left:128px;bottom:40px;font-size:14px;color:var(--mute)">Figuras 1, 3, 4 y 5: Hout et al. (2018) · Foto del supermercado: F. Rasyid (Unsplash) · Mapas y diagramas: elaboración propia</div>
+</section>
+
+</div>
+
+<aside class="notes" id="notes"></aside>
+<div class="zoom" id="zoom"><img alt="Figura ampliada"></div>
+<div class="help" id="help">← → navegar · F pantalla completa · N notas · clic en una figura para ampliarla</div>
 
 <script>
-const deck=document.getElementById('deck'),tabs=[...document.querySelectorAll('.tabs button')];
-let active=tabs[0];
-function show(tab,hash=''){active=tab;tabs.forEach(t=>t.setAttribute('aria-pressed',t===tab));deck.src=tab.dataset.src+hash;}
-tabs.forEach(t=>t.addEventListener('click',()=>show(t)));
-// Las dos versiones tienen el video en la diapositiva 9
-document.getElementById('jump').addEventListener('click',()=>{deck.src='about:blank';setTimeout(()=>show(active,'#9'),30);});
-deck.addEventListener('load',()=>{try{deck.contentWindow.focus();}catch(e){}});
+const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')],notes=document.getElementById('notes');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NAMES=['Contexto','Objetivo','Justificación','Datos','Resultados','Empresa'];
+let cur=0,timers=[];
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform=`scale(${s}) translate(-50%,-50%)`;}
+addEventListener('resize',fit);fit();
+const later=(f,ms)=>timers.push(setTimeout(f,reduce?0:ms));
+const every=(f,ms)=>timers.push(setInterval(f,ms));
+const fmt=v=>v.toLocaleString('es-CO');
+const NS='http://www.w3.org/2000/svg';
+const E=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e;};
+const T=(p,x,y,txt,a={})=>{const e=E('text',Object.assign({x,y,'font-family':'Archivo','font-weight':800,'font-size':18,fill:'#0A0A0A'},a),p);e.textContent=txt;return e;};
+let seed=11;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+
+/* Barra de 6 secciones y pie */
+const total=slides.length-1;
+slides.forEach((sl,i)=>{const n=+sl.dataset.sec;if(!n)return;
+  const inSec=slides.filter(s=>+s.dataset.sec===n),k=inSec.indexOf(sl)+1;
+  let segs='',nums='';
+  NAMES.forEach((nm,j)=>{const c=j+1<n?'done':j+1===n?'now':'';segs+=`<div class="seg ${c}" ${c==='now'?`style="--p:${k/inSec.length}"`:''}><i></i></div>`;nums+=`<span class="${c}">${String(j+1).padStart(2,'0')} ${nm}</span>`;});
+  sl.insertAdjacentHTML('beforeend',`<div class="route"><div class="segs">${segs}</div><div class="nums">${nums}</div></div><div class="foot"><span>Sección ${String(n).padStart(2,'0')} · ${NAMES[n-1]} · ${k} de ${inSec.length}</span><span>${i} / ${total}</span></div>`);
+});
+
+/* ---------- Escenas ---------- */
+const scenes={
+  cover(sl){const cv=sl.querySelector('#cv0'),g=cv.getContext('2d'),N=sl.querySelector('#n0');
+    const P=[];for(let i=0;i<1024;i++)P.push([30+rnd()*500,40+rnd()*680]);
+    const steps=[4,8,16,32,64,128,256,512,1024];let k=0;
+    const draw=n=>{g.clearRect(0,0,560,760);const r=n<64?7:n<256?4.5:n<512?3.2:2.4;
+      for(let i=0;i<n;i++){g.fillStyle=i%7===0?'#E10600':'#F4F2EE';g.beginPath();g.arc(P[i][0],P[i][1],r,0,7);g.fill();}N.textContent=fmt(n);};
+    if(reduce){draw(1024);return;}
+    draw(4);every(()=>{k=(k+1)%steps.length;draw(steps[k]);},k===steps.length-1?2400:650);
+  },
+  pairs(sl){const cv=sl.querySelector('#cvPairs'),g=cv.getContext('2d'),N=sl.querySelector('#pN'),P=sl.querySelector('#pP');
+    const cell=560/61,cw=560/61;
+    const draw=n=>{g.clearRect(0,0,600,560);
+      for(let i=1;i<n;i++)for(let j=0;j<i;j++){g.fillStyle=i<30?'#0A0A0A':'#E10600';g.fillRect(j*cw,i*cell,cw-1.2,cell-1.2);}
+      g.font="500 14px 'JetBrains Mono'";g.fillStyle='#0A0A0A';if(n>=30)g.fillText('← 30 ítems = 435',30*cw+8,30*cell+10);
+      N.textContent=n;P.textContent=fmt(n*(n-1)/2);};
+    if(reduce){draw(60);return;}let n=10;draw(n);
+    later(()=>{const id=setInterval(()=>{n++;draw(n);if(n>=60)clearInterval(id);},75);timers.push(id);},700);
+  },
+  relational(sl){const s=sl.querySelector('#svRel');s.innerHTML='';
+    const C=[[170,140],[520,160],[330,360]],pts=[];
+    for(let i=0;i<11;i++){const c=C[i%3],a=rnd()*6.28,r=30+rnd()*70;pts.push([c[0]+Math.cos(a)*r,c[1]+Math.sin(a)*r*.8]);}
+    const me=[350,210];const gl=E('g',{},s),gp=E('g',{},s);
+    pts.forEach((p,i)=>{const d=E('circle',{cx:p[0],cy:p[1],r:11,fill:'#0A0A0A',opacity:0},gp);d.style.transition='opacity .5s';later(()=>d.setAttribute('opacity',1),300+i*60);});
+    const md=E('circle',{cx:me[0],cy:me[1],r:16,fill:'#E10600',opacity:0},gp);md.style.transition='opacity .5s';later(()=>md.setAttribute('opacity',1),1000);
+    pts.forEach((p,i)=>later(()=>{const l=E('line',{x1:me[0],y1:me[1],x2:me[0],y2:me[1],stroke:'#E10600','stroke-width':2.5,'stroke-opacity':.7},gl);
+      l.style.transition='all .6s cubic-bezier(.16,1,.3,1)';requestAnimationFrame(()=>requestAnimationFrame(()=>{l.setAttribute('x2',p[0]);l.setAttribute('y2',p[1]);}));
+      cnt.textContent=`n − 1 = ${i+1}`;},1300+i*130));
+    const cnt=T(s,20,40,'',{fill:'#E10600','font-family':'Archivo Black','font-size':34});T(s,20,66,'relaciones que ubican al ítem rojo',{'font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#0A0A0A99'});
+    later(()=>{T(s,20,455,'Grupos que quedan juntos = ítems que se perciben parecidos',{'font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#0A0A0A99'});},3000);
+  },
+  gen(sl){const s=sl.querySelector('#svGen');s.innerHTML='';
+    const W=330,gap=40,base=k=>k*(W+gap);const items=[[60,60],[150,40],[250,80],[90,160],[200,150],[280,190],[130,230],[40,230]];
+    // panel frames + arrows
+    for(let k=0;k<4;k++){E('rect',{x:base(k),y:0,width:W,height:270,fill:'none',stroke:'#0A0A0A','stroke-width':k===3?5:3,...(k===3?{stroke:'#E10600'}:{})},s);
+      if(k<3){const a=T(s,base(k)+W+8,145,'→',{'font-family':'Archivo Black','font-size':28,fill:'#E10600',opacity:0});a.style.transition='opacity .4s';later(()=>a.setAttribute('opacity',1),900+k*800);}}
+    // 1 verdadero
+    const g1=E('g',{},s);items.forEach((p,i)=>{const r=E('rect',{x:p[0]-10,y:p[1]-10+10,width:20,height:20,fill:'#0A0A0A',opacity:0},g1);r.style.transition='opacity .4s';later(()=>r.setAttribute('opacity',1),200+i*50);});
+    // 2 diez participantes
+    const g2=E('g',{transform:`translate(${base(1)},0)`},s);items.forEach(p=>E('rect',{x:p[0]-8,y:p[1]+2,width:16,height:16,fill:'none',stroke:'#0A0A0A55','stroke-width':2},g2));
+    for(let q=0;q<10;q++)later(()=>{items.forEach(p=>E('circle',{cx:p[0]+(rnd()-.5)*44,cy:p[1]+10+(rnd()-.5)*44,r:3.5,fill:'#E10600','fill-opacity':.6},g2));},1000+q*70);
+    const t2=T(g2,W-14,258,'× 10',{'text-anchor':'end','font-family':'Archivo Black','font-size':26,fill:'#E10600',opacity:0});t2.style.transition='opacity .4s';later(()=>t2.setAttribute('opacity',1),1700);
+    // 3 diez matrices
+    const g3=E('g',{transform:`translate(${base(2)},0)`},s);
+    for(let q=0;q<10;q++)later(()=>{const ox=40+q*10,oy=30+q*9,m=E('g',{transform:`translate(${ox},${oy})`},g3);
+      E('rect',{x:0,y:0,width:150,height:150,fill:'#F4F2EE',stroke:'#0A0A0A','stroke-width':2},m);
+      for(let i=0;i<8;i++)for(let j=0;j<8;j++)if(i!==j)E('rect',{x:j*18.75+1,y:i*18.75+1,width:17,height:17,fill:'#0A0A0A','fill-opacity':(.15+rnd()*.7).toFixed(2)},m);},1900+q*70);
+    // 4 promedio
+    const g4=E('g',{transform:`translate(${base(3)},0)`},s);
+    later(()=>{const m=E('g',{transform:'translate(70,40)'},g4);E('rect',{x:0,y:0,width:190,height:190,fill:'#F4F2EE',stroke:'#E10600','stroke-width':3},m);
+      for(let i=0;i<8;i++)for(let j=0;j<8;j++)if(i!==j){const d=Math.hypot(items[i][0]-items[j][0],items[i][1]-items[j][1])/300;E('rect',{x:j*23.75+1,y:i*23.75+1,width:22,height:22,fill:'#E10600','fill-opacity':(.15+d*.85).toFixed(2)},m);}
+      T(g4,W/2,258,'entrada del MDS',{'text-anchor':'middle','font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#E10600'});},2800);
+  },
+  count(sl){const el=sl.querySelector('#cnt');if(reduce){el.textContent='337.500';return;}const t0=performance.now();
+    (function st(t){const p=Math.min(1,(t-t0-1200)/1800);if(p<0){requestAnimationFrame(st);return;}el.textContent=fmt(Math.round(337500*(1-Math.pow(1-p,4))));if(p<1&&slides[cur]===sl)requestAnimationFrame(st);})(t0);},
+  beams(sl){const s=sl.querySelector('#svBeam');s.innerHTML='';
+    const build=(cx,cy,k,shift,label,sub)=>{const R=130,g=E('g',{},s);const nb=[];for(let i=0;i<k;i++){const a=-Math.PI/2+i*2*Math.PI/k;nb.push([cx+Math.cos(a)*R,cy+Math.sin(a)*R]);}
+      const ls=nb.map((p,i)=>E('line',{x1:p[0],y1:p[1],x2:cx,y2:cy,stroke:'#0A0A0A','stroke-width':4},g));
+      nb.forEach(p=>E('rect',{x:p[0]-8,y:p[1]-8,width:16,height:16,fill:'#0A0A0A'},g));
+      E('circle',{cx,cy,r:15,fill:'none',stroke:'#0A0A0A55','stroke-width':2,'stroke-dasharray':'4 4'},g);
+      const node=E('circle',{cx:0,cy:0,r:15,fill:'#E10600',class:'mv'},g);node.style.transform=`translate(${cx}px,${cy}px)`;
+      T(g,cx,cy+R+46,label,{'text-anchor':'middle','font-size':22});T(g,cx,cy+R+70,sub,{'text-anchor':'middle','font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#0A0A0A99'});
+      later(()=>{ls[0].setAttribute('stroke','#E10600');ls[0].setAttribute('stroke-dasharray','8 8');ls[0].setAttribute('stroke-width',5);},1400);
+      later(()=>{const nx=cx,ny=cy+shift;node.style.transform=`translate(${nx}px,${ny}px)`;ls.forEach(l=>{l.setAttribute('x2',nx);l.setAttribute('y2',ny);});},2000);};
+    build(190,170,3,46,'3 juntas','una viga dañada lo mueve mucho');
+    build(570,170,12,5,'12 juntas','la misma viga casi no lo mueve');
+  },
+  brand(sl){const s=sl.querySelector('#svBrand');s.innerHTML='';const cx=360,cy=280;
+    E('line',{x1:20,y1:cy,x2:700,y2:cy,stroke:'#0A0A0A','stroke-width':3},s);E('line',{x1:cx,y1:20,x2:cx,y2:540,stroke:'#0A0A0A','stroke-width':3},s);
+    T(s,700,cy-12,'Dimensión 1',{'text-anchor':'end','font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#0A0A0A99'});
+    T(s,cx+12,36,'Dimensión 2',{'font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#0A0A0A99'});
+    const P=[['Propio 1',150,110,1],['Propio 2',190,150,1],['Propio 3',140,170,1],['Competidor A',540,105,0],['Propio 4',520,150,1],['Competidor B',120,420,0],['Competidor C',190,480,0]];
+    P.forEach((p,i)=>{const g=E('g',{class:'mv'},s);g.style.transform=`translate(${cx}px,${cy}px) scale(0)`;g.style.transitionDelay=(500+i*140)+'ms';
+      E('circle',{r:p[3]?12:10,fill:p[3]?'#E10600':'#0A0A0A'},g);T(g,18,6,p[0],{'font-size':17,fill:p[3]?'#E10600':'#0A0A0A'});
+      later(()=>g.style.transform=`translate(${p[1]}px,${p[2]}px) scale(1)`,60);});
+    const ann=(f)=>later(f,1900);
+    ann(()=>{E('ellipse',{cx:190,cy:142,rx:125,ry:68,fill:'none',stroke:'#E10600','stroke-width':2.5},s);T(s,40,62,'Canibalización',{'font-family':'JetBrains Mono','font-weight':500,'font-size':15,fill:'#E10600'});
+      E('ellipse',{cx:588,cy:128,rx:124,ry:50,fill:'none',stroke:'#0A0A0A','stroke-width':2.5},s);T(s,470,68,'Competidor cercano',{'font-family':'JetBrains Mono','font-weight':500,'font-size':15});
+      E('circle',{cx:560,cy:420,r:80,fill:'none',stroke:'#E10600','stroke-width':3,'stroke-dasharray':'8 8'},s);T(s,560,416,'Zona vacía',{'text-anchor':'middle','font-size':19,fill:'#E10600'});T(s,560,440,'oportunidad',{'text-anchor':'middle','font-family':'JetBrains Mono','font-weight':500,'font-size':14,fill:'#E10600'});});
+  }
+};
+
+/* ---------- Zoom de figuras ---------- */
+const zoom=document.getElementById('zoom'),zimg=zoom.querySelector('img');
+document.querySelectorAll('[data-zoom]').forEach(f=>f.addEventListener('click',()=>{zimg.src=f.dataset.zoom;zoom.classList.add('show');}));
+zoom.addEventListener('click',()=>zoom.classList.remove('show'));
+
+/* ---------- Navegación ---------- */
+function go(i){
+  i=Math.max(0,Math.min(slides.length-1,i));zoom.classList.remove('show');
+  timers.forEach(t=>{clearTimeout(t);clearInterval(t);});timers=[];
+  slides[cur].classList.remove('active','in');cur=i;const sl=slides[cur];
+  sl.classList.add('active');sl.getBoundingClientRect();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>sl.classList.add('in')));
+  const sc=i===0?'cover':sl.dataset.scene;sc&&scenes[sc]&&scenes[sc](sl);
+  notes.innerHTML=`<h4>Diapositiva ${cur} de ${total}</h4>`+(sl.dataset.notes||'');
+  history.replaceState(null,'','#'+cur);
+}
+addEventListener('keydown',e=>{
+  if(zoom.classList.contains('show')){e.preventDefault();zoom.classList.remove('show');return;}
+  if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(cur+1);}
+  else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(cur-1);}
+  else if(e.key==='Home')go(0);else if(e.key==='End')go(slides.length-1);
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}
+  else if(e.key==='n'||e.key==='N')notes.classList.toggle('show');
+});
+stage.addEventListener('click',e=>{if(e.target.closest('[data-stop]'))return;const r=stage.getBoundingClientRect();go(e.clientX<r.left+r.width*.3?cur-1:cur+1);});
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)go(cur+(dx<0?1:-1));tx=null;});
+setTimeout(()=>document.getElementById('help').classList.add('hide'),5000);
+go(parseInt(location.hash.slice(1))||0);
 </script>
 </body>
 </html>
