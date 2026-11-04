@@ -105,7 +105,7 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
   <h1 class="big wipe abs" style="--d:400;left:128px;top:150px;font-size:122px">¿El MDS<br>aguanta<br><span class="red">1.024</span><br>ítems?</h1>
   <div class="r abs" style="--d:900;left:128px;top:608px;width:860px;font-size:23px;font-weight:800;line-height:1.25">Simulación de la fidelidad de los datos con conjuntos grandes de estímulos y estimación variable de la dimensionalidad en el escalamiento multidimensional</div>
   <div class="r abs mono" style="--d:1000;left:128px;top:700px;font-size:15px;color:var(--mute)">Hout, Cunningham, Robbins &amp; MacDonald (2018) · SAGE Open · Profesor: Leonel Arango Vásquez</div>
-  <div class="r abs" style="--d:1150;left:128px;top:752px;width:880px;font-size:15px;line-height:1.6;font-weight:600"><span class="mono red" style="letter-spacing:.12em;font-weight:500">ADMINISTRACIÓN DE NEGOCIOS · CUARTO SEMESTRE</span><br>Sara Betancourth Álvarez · María Caballero Mestre · Mariana Cano Zuluaga · Miguel Escudero Pulgarín · Mateo Franco Cermeño · Camilo Hernández Zapata · María Marín Salazar · Sofia Muñoz Castillo · Emmanuel Ortiz Serna · Sofia Pelaez Perez</div>
+  <div class="r abs" style="--d:1150;left:128px;top:752px;width:880px;font-size:15px;line-height:1.6;font-weight:600"><span class="mono red" style="letter-spacing:.12em;font-weight:500">ADMINISTRACIÓN DE NEGOCIOS · CUARTO SEMESTRE</span><br>Sara Betancourth Álvarez · María Caballero Mestre · Mariana Cano Zuluaga · Miguel Escudero Pulgarín · Mateo Franco Cermeño · Camilo Hernández Zapata · María Marín Salazar · Sofia Muñoz Castillo · Emmanuel Ortiz Serna · Sofia Peláez Perez</div>
 </section>
 
 <!-- ===================== 1 · CONTEXTO (a) ===================== -->
@@ -193,7 +193,7 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 <!-- ===================== 3 · JUSTIFICACIÓN (a) ===================== -->
 <section class="slide" data-sec="3" data-scene="relational" data-notes="<h4>Justificación · ¿por qué una técnica multivariada?</h4><ul><li>El MDS toma proximidades (qué tan parecido o diferente es cada par de ítems) y produce un mapa espacial. La distancia entre 2 puntos representa la similitud: más cerca = más parecidos; más lejos = menos parecidos. El analista decide cuántas dimensiones tiene el mapa.</li><li>Es relacional y multivariado: un ítem no se define solo por un valor, sino por cómo se relaciona con todos los demás. La animación lo muestra: el ítem rojo queda ubicado por sus relaciones con los otros 11.</li><li>Comúnmente se usa en psicología con 10 a 30 estímulos (imágenes, palabras o rostros que se le presentan a una persona para que juzgue su parecido). Aquí querían saber si seguía funcionando hasta con 1.024.</li><li>Prácticamente el MDS no se usó para estudiar los estímulos: los estímulos sirvieron para estudiar la capacidad del MDS.</li></ul>">
   <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>03</b> — Justificación de la técnica</div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · ¿por qué esta técnica multivariada?</div>
   <h2 class="big h wipe" style="--d:250;font-size:92px">Cerca =<br><span class="red">parecido</span></h2>
   <div class="tx r abs" style="--d:600;left:80px;top:410px;width:660px">
     <p>El MDS toma <b>proximidades</b>, qué tan parecido o diferente es cada par de ítems, y produce un <b>mapa espacial</b>. La distancia entre dos puntos es su similitud. El analista decide cuántas dimensiones tiene el mapa.</p>
@@ -204,7 +204,27 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
   <div class="r abs mono sm mute" style="--d:1600;left:80px;top:780px;width:680px;font-size:15px">En psicología: 10 a 30 estímulos (imágenes, palabras o rostros) que una persona juzga por su parecido</div>
 </section>
 
-<!-- ===================== 3 · JUSTIFICACIÓN (b) ===================== -->
+<!-- ===================== 3 · JUSTIFICACIÓN (b) PARADOJA ===================== -->
+<section class="slide" data-sec="3" data-notes="<h4>Justificación · ¿qué les permitió descubrir que habría sido difícil con un análisis más sencillo?</h4><ul><li>El documento lo explica con grandes hallazgos. El primero es la paradoja del MDS. (Nota: el Word anuncia 3 hallazgos pero por ahora solo trae este, y el párrafo queda cortado al final.)</li><li>Si se hace un análisis simple, como calcular un promedio o una correlación directa entre lo que las personas responden sin antes hacer un escalamiento multidimensional, se puede concluir que cuantos más objetos se ponen a evaluar, la respuesta se vuelve más imprecisa: las personas se cansan.</li><li>En el MDS se evalúa una métrica llamada estrés (stress), que sube a medida que se agregan más datos. Con 100 objetos el valor era altísimo, y por eso se pensaba que el mapa &quot;estaba mal construido&quot;.</li><li>El estudio demostró que ese estrés sube simplemente por la acumulación de pequeñas imprecisiones numéricas al responder, pero la ubicación de los puntos en el mapa se vuelve más precisa.</li><li>Con el análisis plano la conclusión sería: &quot;No usemos muchos objetos, porque la gente se equivoca más y los datos son cada vez peores&quot;.</li><li>El MDS no evalúa cada dato aislado: la posición de un punto no depende de una sola respuesta, sino de sus relaciones con los demás elementos del espacio. Usa n − 1 proximidades: en un conjunto de 1.024 ítems, la ubicación de cada uno está respaldada por 1.023 objetos.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · ¿qué permitió descubrir?</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">La paradoja<br>del <span class="red">MDS</span></h2>
+  <div class="abs" style="left:80px;right:80px;top:390px;display:grid;grid-template-columns:1fr 70px 1fr;align-items:stretch">
+    <div class="card r" style="--d:500;padding:26px">
+      <span class="tag k">Análisis simple · promedio o correlación directa</span>
+      <div class="sm" style="margin-top:6px">Más objetos para evaluar = respuestas <b>más imprecisas</b>. El <b>stress sube</b> con más datos: con 100 objetos era altísimo y parecía que el mapa <b>&quot;estaba mal construido&quot;</b>.</div>
+      <div class="quote" style="font-size:21px;margin-top:16px;border-left-color:var(--ink)">&quot;No usemos muchos objetos: la gente se equivoca más y los datos son cada vez peores&quot;</div>
+    </div>
+    <div class="num red r" style="--d:800;font-size:60px;display:grid;place-items:center">→</div>
+    <div class="card fill r" style="--d:1000;padding:26px">
+      <span class="tag">Con el MDS</span>
+      <div class="sm" style="margin-top:6px">No evalúa cada dato aislado: la posición de un punto depende de <b>sus relaciones con todos los demás</b>. El stress sube por la suma de pequeñas imprecisiones, pero <b style="color:#FF6A5F">la ubicación se vuelve más precisa</b>.</div>
+      <div style="display:flex;align-items:baseline;gap:16px;margin-top:16px"><span class="num" style="font-size:64px;color:#FF6A5F">1.023</span><span class="sm">comparaciones respaldan cada ítem en un conjunto de <b>1.024</b> · n − 1</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3 · JUSTIFICACIÓN (c) ===================== -->
 <section class="slide" data-sec="3" data-notes="<h4>Justificación · métrico y Monte Carlo</h4><ul><li>Usaron un MDS métrico, que utiliza números con distancias reales entre ellos (por ejemplo, calificándolas del 0 al 100). El no métrico usa solo el orden de mayor a menor.</li><li>Para probarlo usaron simulaciones Monte Carlo: un experimento que se repite muchas veces, generado por computador con datos aleatorios, y luego se mira qué pasa con el promedio.</li><li>Se hizo así porque con datos reales no se conoce el mapa verdadero. Crearon un espacio &quot;verdadero&quot;, le sumaron ruido aleatorio (imitando que no se califica perfectamente), corrieron el MDS y compararon.</li><li>Variaron la cantidad de ruido, el número de ítems y la dimensionalidad para ver cómo reaccionaba, repitiendo cada condición 500 veces.</li></ul>">
   <div class="grid"></div>
   <div class="kicker r" style="--d:100"><b>03</b> — Justificación de la técnica</div>
@@ -387,11 +407,44 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
   </div>
 </section>
 
+<!-- ===================== 6 · CONCLUSIONES (a) ===================== -->
+<section class="slide" data-sec="6" data-notes="<h4>Conclusiones · ¿qué encontraron?</h4><ul><li>Los autores encontraron que el MDS sí funciona con conjuntos grandes de ítems. Si el número de dimensiones se elige bien o de más, el mapa se mantiene fiel cuando hay poco ruido y mejora a medida que se agregan ítems cuando hay más ruido, a partir de unos 16 ítems.</li><li>Los resultados respaldan tres ideas. Primero, el ruido en los datos es lo que más daña el mapa; la complejidad del espacio casi no influye.</li><li>Segundo, la mejora no viene de que los datos sean mejores, sino del MDS, que ubica cada ítem usando su relación con todos los demás, así que un error aislado pesa menos.</li><li>Tercero, usar menos dimensiones de las necesarias es mucho más perjudicial que usar de más.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>06</b> — Conclusiones · qué encontraron</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">El MDS <span class="red">sí</span> funciona<br>con muchos ítems</h2>
+  <div class="r abs tx" style="--d:500;left:80px;top:395px;width:1440px;font-size:25px">Si las dimensiones se eligen <b>bien o de más</b>: con <b>poco ruido</b> el mapa se mantiene fiel, y con <b>más ruido</b> <b class="red">mejora al agregar ítems</b>, a partir de unos 16.</div>
+  <div class="r abs" style="--d:700;left:80px;top:490px"><span class="tag">Lo que los resultados respaldan</span></div>
+  <div class="abs" style="left:80px;right:80px;top:530px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+    <div class="card r" style="--d:800"><div class="num red" style="font-size:44px">1</div><div class="sm" style="margin-top:8px">El <b>ruido</b> en los datos es lo que <b>más daña</b> el mapa. La complejidad del espacio casi no influye.</div></div>
+    <div class="card r" style="--d:1000"><div class="num red" style="font-size:44px">2</div><div class="sm" style="margin-top:8px">La mejora <b>no viene de mejores datos</b>, sino del MDS: ubica cada ítem con su relación con todos, y un error aislado pesa menos.</div></div>
+    <div class="card fill r" style="--d:1200"><div class="num" style="font-size:44px;color:#FF6A5F">3</div><div class="sm" style="margin-top:8px">Usar <b>menos dimensiones</b> de las necesarias es <b>mucho más perjudicial</b> que usar de más.</div></div>
+  </div>
+</section>
+
+<!-- ===================== 6 · CONCLUSIONES (b) ===================== -->
+<section class="slide" data-sec="6" data-notes="<h4>Conclusiones · qué requiere cautela y limitaciones</h4><ul><li>Hay que tener cautela con decir que &quot;más ítems siempre es mejor&quot;. Con mucho ruido, incluso con 1.024 ítems, el mapa explica solo cerca del 12 % de la realidad.</li><li>La explicación de por qué funciona (la &quot;ley de los grandes números&quot;) es una intuición de los autores que no comprobaron.</li><li>La principal limitación es que todos los datos fueron simulados, con un error mucho más ordenado que el de personas reales, que se cansan o tienen sesgos.</li><li>También solo probaron un tipo de MDS (el métrico), así que no se sabe si los resultados se cumplen con el otro tipo.</li><li>Además, aunque los autores reconocen que más ítems implica muchas más comparaciones, y por tanto más tiempo y costo, no estudiaron cómo equilibrar ese costo con la mejora del mapa.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>06</b> — Conclusiones · cautela y limitaciones</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Lo que <span class="red">no</span> se<br>puede afirmar</h2>
+  <div class="abs" style="left:80px;top:390px;width:640px">
+    <div class="r" style="--d:500"><span class="tag">Cautela · &quot;más ítems siempre es mejor&quot;</span><div class="sm">Con mucho ruido, incluso con <b>1.024 ítems</b>, el mapa explica solo cerca del</div>
+      <div style="display:flex;align-items:center;gap:20px;margin-top:10px"><span class="num red" style="font-size:72px">12 %</span><div style="flex:1;height:30px;background:#0A0A0A1F;position:relative"><div class="bar" style="--d:800;position:absolute;left:0;top:0;bottom:0;width:12%;background:var(--red)"></div></div></div>
+      <div class="sm mute">de la realidad</div></div>
+    <div class="r" style="--d:900;margin-top:22px;border-top:3px solid var(--ink);padding-top:12px"><span class="tag k">Cautela · por qué funciona</span><div class="sm">La <b>&quot;ley de los grandes números&quot;</b> es una intuición de los autores: <b>no la comprobaron</b>.</div></div>
+  </div>
+  <div class="abs" style="left:800px;top:390px;width:720px">
+    <div class="r" style="--d:700"><span class="tag">Limitaciones</span></div>
+    <div class="card fill r" style="--d:900;margin-bottom:14px;display:grid;grid-template-columns:50px 1fr"><span class="num" style="font-size:34px;color:#FF6A5F">1</span><div class="sm"><b>Todo fue simulado</b>, con un error mucho más ordenado que el de personas reales, que se cansan o tienen sesgos. <span class="mono" style="font-size:13px;color:#FF6A5F">PRINCIPAL</span></div></div>
+    <div class="card r" style="--d:1100;margin-bottom:14px;display:grid;grid-template-columns:50px 1fr"><span class="num red" style="font-size:34px">2</span><div class="sm">Solo probaron el <b>MDS métrico</b>: no se sabe si se cumple con el no métrico.</div></div>
+    <div class="card r" style="--d:1300;display:grid;grid-template-columns:50px 1fr"><span class="num red" style="font-size:34px">3</span><div class="sm">Reconocen que más ítems = más comparaciones, tiempo y costo, pero <b>no estudiaron cómo equilibrarlo</b> con la mejora del mapa.</div></div>
+  </div>
+</section>
+
 <!-- ===================== 6 · EMPRESA (a) ===================== -->
-<section class="slide" data-sec="6" data-notes="<h4>Aplicación empresarial · el problema</h4><ul><li>La principal utilidad del MDS es transformar datos complejos en una representación visual que facilite el análisis y la toma de decisiones.</li><li>Caso: una cadena de retail colombiana (un supermercado o una tienda de moda) con 300 productos en su línea de marca propia.</li><li>Pregunta estratégica de la gerencia: ¿cómo perciben los clientes estos productos frente a la competencia y dónde hay espacios en el mercado que nadie está atendiendo?</li><li>El número de comparaciones es un cálculo nuestro con la fórmula de pares: 300 × 299 / 2 = 44.850. Sirve para mostrar el costo que menciona el documento.</li></ul>">
+<section class="slide" data-sec="7" data-notes="<h4>Aplicación empresarial · el problema</h4><ul><li>La principal utilidad del MDS es transformar datos complejos en una representación visual que facilite el análisis y la toma de decisiones.</li><li>Caso: una cadena de retail colombiana (un supermercado o una tienda de moda) con 300 productos en su línea de marca propia.</li><li>Pregunta estratégica de la gerencia: ¿cómo perciben los clientes estos productos frente a la competencia y dónde hay espacios en el mercado que nadie está atendiendo?</li><li>El número de comparaciones es un cálculo nuestro con la fórmula de pares: 300 × 299 / 2 = 44.850. Sirve para mostrar el costo que menciona el documento.</li></ul>">
   <div class="grid"></div>
   <div class="abs" style="left:1100px;top:140px;width:420px;height:680px;overflow:hidden"><img src="img/empresa-supermercado.jpg" alt="Pasillo de supermercado" style="width:100%;height:100%;object-fit:cover;object-position:45% 50%;filter:grayscale(1) contrast(1.1)"></div>
-  <div class="kicker r" style="--d:100"><b>06</b> — Aplicación empresarial</div>
+  <div class="kicker r" style="--d:100"><b>07</b> — Aplicación empresarial</div>
   <h2 class="big h wipe" style="--d:250;font-size:84px">300 productos,<br>¿cómo los <span class="red">ven</span>?</h2>
   <div class="tx r abs" style="--d:500;left:80px;top:400px;width:900px">Una <b>cadena de retail colombiana</b>, un supermercado o una tienda de moda, con <b class="red">300 productos de marca propia</b>.</div>
   <div class="r abs quote" style="--d:800;left:80px;top:500px;width:900px;font-size:28px">¿Cómo perciben los clientes estos productos frente a la competencia, y <span class="red">dónde hay espacios que nadie está atendiendo</span>?</div>
@@ -402,9 +455,9 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 </section>
 
 <!-- ===================== 6 · EMPRESA (b) ===================== -->
-<section class="slide" data-sec="6" data-scene="brand" data-notes="<h4>Aplicación empresarial · cómo funciona</h4><ul><li>Mediante encuestas y comparaciones entre marcas, la empresa construye una matriz de similitudes, que después se transforma en un mapa multidimensional.</li><li>Mapa perceptual: cada producto es un punto, y los productos que los clientes ven como parecidos quedan cerca.</li><li>Así la empresa puede ver qué productos compiten entre sí y canibalizan ventas, qué marcas ocupan la misma posición (competidores cercanos) y dónde hay zonas vacías, que son oportunidad para un producto nuevo o para diferenciarse.</li><li>El mapa de la derecha es un ejemplo ilustrativo, no datos reales.</li></ul>">
+<section class="slide" data-sec="7" data-scene="brand" data-notes="<h4>Aplicación empresarial · cómo funciona</h4><ul><li>Mediante encuestas y comparaciones entre marcas, la empresa construye una matriz de similitudes, que después se transforma en un mapa multidimensional.</li><li>Mapa perceptual: cada producto es un punto, y los productos que los clientes ven como parecidos quedan cerca.</li><li>Así la empresa puede ver qué productos compiten entre sí y canibalizan ventas, qué marcas ocupan la misma posición (competidores cercanos) y dónde hay zonas vacías, que son oportunidad para un producto nuevo o para diferenciarse.</li><li>El mapa de la derecha es un ejemplo ilustrativo, no datos reales.</li></ul>">
   <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>06</b> — Aplicación empresarial</div>
+  <div class="kicker r" style="--d:100"><b>07</b> — Aplicación empresarial</div>
   <h2 class="big h wipe" style="--d:250;font-size:84px">De la encuesta<br>al <span class="red">mapa</span></h2>
   <div class="abs" style="left:80px;top:400px;width:640px">
     <div class="step r" style="--d:500;display:grid;grid-template-columns:70px 1fr;align-items:center;margin-bottom:18px"><div class="n" style="margin:0">1</div><div class="sm"><b>Encuestas y comparaciones</b> entre productos y marcas</div></div>
@@ -417,9 +470,9 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 </section>
 
 <!-- ===================== 6 · EMPRESA (c) ===================== -->
-<section class="slide" data-sec="6" data-notes="<h4>Aplicación empresarial · qué cuidar y qué decidir</h4><ul><li>Tradicionalmente el MDS se ha usado con pocos productos, por la preocupación de que más elementos reduzcan la confiabilidad. El artículo muestra que trabajar con conjuntos más grandes puede mejorar la capacidad del MDS de representar la estructura real, siempre que se estime adecuadamente la dimensionalidad y se controle la calidad de los datos.</li><li>Subestimar la dimensionalidad puede perjudicar la representación de las relaciones entre productos. Respuestas inconsistentes, errores de medición y ruido afectan los resultados.</li><li>Analizar más productos también aumenta las comparaciones y el tiempo de recolección: hay que encontrar un equilibrio entre amplitud del análisis, calidad de la información y recursos.</li><li>Con los resultados, la empresa podría ajustar sus estrategias de marketing, reposicionar su marca, modificar productos, organizar mejor su surtido, desarrollar productos nuevos o alimentar sistemas de recomendación.</li><li>Después debe evaluar el impacto con ventas, retención de clientes, satisfacción y desempeño de los productos.</li></ul>">
+<section class="slide" data-sec="7" data-notes="<h4>Aplicación empresarial · qué cuidar y qué decidir</h4><ul><li>Tradicionalmente el MDS se ha usado con pocos productos, por la preocupación de que más elementos reduzcan la confiabilidad. El artículo muestra que trabajar con conjuntos más grandes puede mejorar la capacidad del MDS de representar la estructura real, siempre que se estime adecuadamente la dimensionalidad y se controle la calidad de los datos.</li><li>Subestimar la dimensionalidad puede perjudicar la representación de las relaciones entre productos. Respuestas inconsistentes, errores de medición y ruido afectan los resultados.</li><li>Analizar más productos también aumenta las comparaciones y el tiempo de recolección: hay que encontrar un equilibrio entre amplitud del análisis, calidad de la información y recursos.</li><li>Con los resultados, la empresa podría ajustar sus estrategias de marketing, reposicionar su marca, modificar productos, organizar mejor su surtido, desarrollar productos nuevos o alimentar sistemas de recomendación.</li><li>Después debe evaluar el impacto con ventas, retención de clientes, satisfacción y desempeño de los productos.</li></ul>">
   <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>06</b> — Aplicación empresarial</div>
+  <div class="kicker r" style="--d:100"><b>07</b> — Aplicación empresarial</div>
   <h2 class="big h wipe" style="--d:250;font-size:84px">Qué cuidar,<br>qué <span class="red">decidir</span></h2>
   <div class="abs" style="left:80px;right:80px;top:390px;display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:24px">
     <div class="card r" style="--d:500"><span class="tag">Lo que aporta el paper</span><div class="sm">Más productos <b>pueden mejorar</b> el mapa, siempre que:</div>
@@ -454,7 +507,7 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 <script>
 const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')],notes=document.getElementById('notes');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const NAMES=['Contexto','Objetivo','Justificación','Datos','Resultados','Empresa'];
+const NAMES=['Contexto','Objetivo','Justificación','Datos','Resultados','Conclusiones','Empresa'];
 let cur=0,timers=[];
 function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform=`scale(${s}) translate(-50%,-50%)`;}
 addEventListener('resize',fit);fit();
