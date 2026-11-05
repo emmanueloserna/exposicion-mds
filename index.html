@@ -231,9 +231,9 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 </section>
 
 <!-- ===================== 3 · JUSTIFICACIÓN (c) · PREGUNTA 2 · PARADOJA ===================== -->
-<section class="slide" data-sec="3" data-notes="<h4>Justificación · Pregunta 2: ¿Qué les permitió descubrir que habría sido difícil identificar mediante un análisis más sencillo?</h4><ul><li>El documento lo explica con grandes hallazgos. El primero es la paradoja del MDS. (Nota: el Word anuncia 3 hallazgos pero por ahora solo trae este, y el párrafo queda cortado al final.)</li><li>Si se hace un análisis simple, como calcular un promedio o una correlación directa entre lo que las personas responden sin antes hacer un escalamiento multidimensional, se puede concluir que cuantos más objetos se ponen a evaluar, la respuesta se vuelve más imprecisa: las personas se cansan.</li><li>En el MDS se evalúa una métrica llamada estrés (stress), que sube a medida que se agregan más datos. Con 100 objetos el valor era altísimo, y por eso se pensaba que el mapa &quot;estaba mal construido&quot;.</li><li>El estudio demostró que ese estrés sube simplemente por la acumulación de pequeñas imprecisiones numéricas al responder, pero la ubicación de los puntos en el mapa se vuelve más precisa.</li><li>Con el análisis plano la conclusión sería: &quot;No usemos muchos objetos, porque la gente se equivoca más y los datos son cada vez peores&quot;.</li><li>El MDS no evalúa cada dato aislado: la posición de un punto no depende de una sola respuesta, sino de sus relaciones con los demás elementos del espacio. Usa n − 1 proximidades: en un conjunto de 1.024 ítems, la ubicación de cada uno está respaldada por 1.023 objetos.</li></ul>">
+<section class="slide" data-sec="3" data-notes="<h4>Justificación · Pregunta 2: ¿Qué les permitió descubrir que habría sido difícil identificar mediante un análisis más sencillo?</h4><ul><li>El documento lo explica con grandes hallazgos. El primero es la paradoja del MDS; el segundo, el efecto asimétrico (siguiente diapositiva).</li><li>Si se hace un análisis simple, como calcular un promedio o una correlación directa entre lo que las personas responden sin antes hacer un escalamiento multidimensional, se puede concluir que cuantos más objetos se ponen a evaluar, la respuesta se vuelve más imprecisa: las personas se cansan.</li><li>En el MDS se evalúa una métrica llamada estrés (stress), que sube a medida que se agregan más datos. Con 100 objetos el valor era altísimo, y por eso se pensaba que el mapa &quot;estaba mal construido&quot;.</li><li>El estudio demostró que ese estrés sube simplemente por la acumulación de pequeñas imprecisiones numéricas al responder, pero la ubicación de los puntos en el mapa se vuelve más precisa.</li><li>Con el análisis plano la conclusión sería: &quot;No usemos muchos objetos, porque la gente se equivoca más y los datos son cada vez peores&quot;.</li><li>El MDS no evalúa cada dato aislado: la posición de un punto no depende de una sola respuesta, sino de sus relaciones con los demás elementos del espacio. Usa n − 1 proximidades: en un conjunto de 1.024 ítems, la ubicación de cada uno está respaldada por 1.023 objetos.</li></ul>">
   <div class="grid"></div>
-  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · Pregunta 2</div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · Pregunta 2 · Hallazgo 1</div>
   <h2 class="big h wipe" style="--d:250;font-size:84px">La paradoja<br>del <span class="red">MDS</span></h2>
   <div class="r abs" style="--d:400;left:80px;top:352px;width:1440px;border-left:8px solid var(--red);padding:4px 0 4px 18px;font-size:24px;font-weight:800">¿Qué les permitió descubrir que habría sido difícil identificar mediante un análisis más sencillo?</div>
   <div class="abs" style="left:80px;right:80px;top:420px;display:grid;grid-template-columns:1fr 70px 1fr;align-items:stretch">
@@ -249,6 +249,27 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
       <div style="display:flex;align-items:baseline;gap:16px;margin-top:16px"><span class="num" style="font-size:64px;color:#FF6A5F">1.023</span><span class="sm">comparaciones respaldan cada ítem en un conjunto de <b>1.024</b> · n − 1</span></div>
     </div>
   </div>
+</section>
+
+<!-- ===================== 3 · JUSTIFICACIÓN (d) · Hallazgo 2 ===================== -->
+<section class="slide" data-sec="3" data-notes="<h4>Justificación · Pregunta 2 · Hallazgo 2: el efecto asimétrico al equivocarse con la dimensionalidad</h4><ul><li>Cuando los investigadores probaron distintas dimensiones, les permitió descubrir:</li><li>Si se subestiman las dimensiones (los datos se encuentran en cuatro dimensiones y se le pide al modelo representarlos en dos), la precisión del mapa empeora.</li><li>Si se sobreestiman las dimensiones (los datos se encuentran en dos dimensiones, pero se le pide al modelo en cuatro), el mapa sigue manteniendo una alta precisión, aunque se aumenten masivamente los elementos.</li><li>En un análisis más sencillo esta asimetría no se habría podido captar.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>03</b> — Justificación · Pregunta 2 · Hallazgo 2</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">El efecto<br><span class="red">asimétrico</span></h2>
+  <div class="r abs" style="--d:400;left:80px;top:352px;width:1440px;border-left:8px solid var(--red);padding:4px 0 4px 18px;font-size:24px;font-weight:800">¿Qué les permitió descubrir que habría sido difícil identificar mediante un análisis más sencillo?</div>
+  <div class="abs" style="left:80px;right:80px;top:420px;display:grid;grid-template-columns:1fr 1fr;gap:40px">
+    <div class="card r" style="--d:500;padding:26px">
+      <span class="tag k">Subestimar las dimensiones</span>
+      <div style="display:flex;align-items:baseline;gap:14px;margin-top:10px"><span class="num" style="font-size:64px">4D → 2D</span></div>
+      <div class="sm" style="margin-top:8px">Los datos están en <b>cuatro</b> dimensiones y se le pide al modelo representarlos en <b>dos</b>: la precisión del mapa <b class="red">empeora</b>.</div>
+    </div>
+    <div class="card fill r" style="--d:900;padding:26px">
+      <span class="tag">Sobreestimar las dimensiones</span>
+      <div style="display:flex;align-items:baseline;gap:14px;margin-top:10px"><span class="num" style="font-size:64px;color:#FF6A5F">2D → 4D</span></div>
+      <div class="sm" style="margin-top:8px">Los datos están en <b>dos</b> dimensiones y se le pide al modelo <b>cuatro</b>: el mapa <b style="color:#FF6A5F">mantiene una alta precisión</b>, aunque se aumenten masivamente los elementos.</div>
+    </div>
+  </div>
+  <div class="tx r abs" style="--d:1300;left:80px;top:710px;width:1440px;font-weight:800">En un análisis más sencillo esta <span class="red">asimetría</span> no se habría podido captar.</div>
 </section>
 
 <!-- ===================== 4 · DATOS (a) ===================== -->
