@@ -328,20 +328,23 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
 </section>
 
 <!-- ===================== 4 · DATOS (c) APLICACIÓN TÉCNICA ===================== -->
-<section class="slide" data-sec="4" data-notes="<h4>Aplicación técnica</h4><ul><li>La aplicación técnica consistió en utilizar el Escalamiento Multidimensional (MDS) métrico, mediante el programa MATLAB y su función mdscale.</li><li>Primero, los investigadores generaron datos artificiales y calcularon las distancias euclidianas entre todos los pares de elementos.</li><li>Después, utilizaron esas distancias como información de entrada para que el MDS construyera un mapa, donde cada elemento quedaba ubicado según su similitud o diferencia con los demás.</li><li>Posteriormente, compararon el mapa obtenido con la estructura original que habían creado previamente, para determinar qué tan bien el método lograba representar las relaciones reales.</li><li>Para comprobarlo, modificaron tres condiciones: la cantidad de elementos, el nivel de ruido en los datos y el número de dimensiones utilizadas. Cada condición se repitió 500 veces, lo que permitió evaluar la precisión y confiabilidad del MDS en diferentes escenarios.</li></ul>">
+<section class="slide" data-sec="4" data-notes="<h4>Aplicación técnica</h4><ul><li>La aplicación técnica consistió en utilizar el Escalamiento Multidimensional Métrico (MDS) mediante el programa MATLAB, específicamente con la función mdscale.</li><li>Primero, los investigadores generaron espacios multidimensionales hipotéticos con entre 4 y 1.024 elementos, cuyas coordenadas representaban su ubicación real.</li><li>Posteriormente, simularon diez participantes agregando diferentes niveles de ruido aleatorio a las coordenadas de cada elemento.</li><li>Con esas ubicaciones calcularon las distancias euclidianas entre todos los pares de elementos y promediaron las distancias obtenidas por los diez participantes. Este resultado fue utilizado como entrada para aplicar el MDS y reconstruir el mapa multidimensional.</li><li>Después, compararon el mapa reconstruido con el espacio original para evaluar qué tan fielmente el MDS lograba recuperar las relaciones entre los elementos.</li><li>Para ello, realizaron tres experimentos: en el primero utilizaron el número correcto de dimensiones; en el segundo, un número inferior al necesario; y en el tercero, un número superior.</li><li>En los tres casos variaron la cantidad de elementos y los niveles de ruido, repitiendo cada condición 500 veces. En total realizaron 337.500 simulaciones.</li><li>Así pudieron evaluar cómo influían estos factores en la precisión del método y determinar bajo qué condiciones era más confiable utilizarlo con conjuntos grandes de elementos.</li></ul>">
   <div class="grid"></div>
   <div class="kicker r" style="--d:100"><b>04</b> — Datos utilizados · Aplicación técnica</div>
   <h2 class="big h wipe" style="--d:250;font-size:84px">Aplicación<br><span class="red">técnica</span></h2>
-  <div class="tx r abs" style="--d:500;left:880px;top:190px;width:640px">Escalamiento Multidimensional <b>(MDS) métrico</b>, en <b>MATLAB</b> con su función <span class="mono" style="font-size:20px">mdscale</span>.</div>
-  <div class="abs" style="left:80px;right:80px;top:420px;display:grid;grid-template-columns:repeat(4,1fr);gap:40px">
-    <div class="r" style="--d:700"><span class="tag k">Paso 1</span><div class="sm">Generaron <b>datos artificiales</b></div></div>
-    <div class="r" style="--d:1100"><span class="tag k">Paso 2</span><div class="sm">Calcularon las <b>distancias euclidianas</b> entre todos los pares de elementos</div></div>
-    <div class="r" style="--d:1500"><span class="tag k">Paso 3</span><div class="sm">Con esas distancias el <b>MDS construyó un mapa</b>: cada elemento se ubica según su similitud o diferencia con los demás</div></div>
-    <div class="r" style="--d:1900"><span class="tag">Paso 4</span><div class="sm"><b>Compararon el mapa</b> con la estructura original para ver qué tan bien representaba las relaciones reales</div></div>
+  <div class="tx r abs" style="--d:500;left:880px;top:190px;width:640px"><b>MDS métrico</b> en <b>MATLAB</b>, con la función <span class="mono" style="font-size:20px">mdscale</span>.</div>
+  <div class="abs" style="left:80px;right:80px;top:400px;display:grid;grid-template-columns:repeat(5,1fr);gap:32px">
+    <div class="r" style="--d:700"><span class="tag k">Paso 1</span><div class="sm">Espacios <b>hipotéticos</b> de <b>4 a 1.024</b> elementos; sus coordenadas son la <b>ubicación real</b></div></div>
+    <div class="r" style="--d:1000"><span class="tag k">Paso 2</span><div class="sm"><b>10 participantes</b> simulados: <b>ruido aleatorio</b> en distintos niveles sobre las coordenadas</div></div>
+    <div class="r" style="--d:1300"><span class="tag k">Paso 3</span><div class="sm"><b>Distancias euclidianas</b> entre todos los pares, <b>promediadas</b> entre los 10</div></div>
+    <div class="r" style="--d:1600"><span class="tag k">Paso 4</span><div class="sm">Ese promedio es la <b>entrada del MDS</b>, que <b>reconstruye el mapa</b></div></div>
+    <div class="r" style="--d:1900"><span class="tag">Paso 5</span><div class="sm"><b>Mapa reconstruido vs. espacio original</b>: qué tan fiel recupera las relaciones</div></div>
   </div>
-  <div class="r abs card fill" style="--d:2400;left:80px;right:80px;top:680px">
-    <span class="tag">Para comprobarlo modificaron 3 condiciones</span>
-    <div class="sm">Cantidad de elementos · nivel de ruido en los datos · número de dimensiones utilizadas. <b>Cada condición se repitió 500 veces</b> para evaluar la <b class="red">precisión y confiabilidad</b> del MDS en diferentes escenarios.</div>
+  <div class="abs" style="left:80px;right:80px;top:640px;display:grid;grid-template-columns:repeat(3,1fr) 1.15fr;gap:20px">
+    <div class="r card" style="--d:2300"><span class="tag k">Exp. 1</span><div class="sm">Dimensiones <b>correctas</b></div></div>
+    <div class="r card" style="--d:2500"><span class="tag k">Exp. 2</span><div class="sm"><b>Menos</b> de las necesarias</div></div>
+    <div class="r card" style="--d:2700"><span class="tag k">Exp. 3</span><div class="sm"><b>Más</b> de las necesarias</div></div>
+    <div class="r card fill" style="--d:3000"><span class="tag">En los tres</span><div class="sm">Varían <b>elementos</b> y <b>ruido</b> · <b>500 repeticiones</b> por condición · <b class="red">337.500 simulaciones</b></div></div>
   </div>
 </section>
 
