@@ -327,6 +327,24 @@ body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);-webkit-font-smoo
   </div>
 </section>
 
+<!-- ===================== 4 · DATOS (c) APLICACIÓN TÉCNICA ===================== -->
+<section class="slide" data-sec="4" data-notes="<h4>Aplicación técnica</h4><ul><li>La aplicación técnica consistió en utilizar el Escalamiento Multidimensional (MDS) métrico, mediante el programa MATLAB y su función mdscale.</li><li>Primero, los investigadores generaron datos artificiales y calcularon las distancias euclidianas entre todos los pares de elementos.</li><li>Después, utilizaron esas distancias como información de entrada para que el MDS construyera un mapa, donde cada elemento quedaba ubicado según su similitud o diferencia con los demás.</li><li>Posteriormente, compararon el mapa obtenido con la estructura original que habían creado previamente, para determinar qué tan bien el método lograba representar las relaciones reales.</li><li>Para comprobarlo, modificaron tres condiciones: la cantidad de elementos, el nivel de ruido en los datos y el número de dimensiones utilizadas. Cada condición se repitió 500 veces, lo que permitió evaluar la precisión y confiabilidad del MDS en diferentes escenarios.</li></ul>">
+  <div class="grid"></div>
+  <div class="kicker r" style="--d:100"><b>04</b> — Datos utilizados · Aplicación técnica</div>
+  <h2 class="big h wipe" style="--d:250;font-size:84px">Aplicación<br><span class="red">técnica</span></h2>
+  <div class="tx r abs" style="--d:500;left:880px;top:190px;width:640px">Escalamiento Multidimensional <b>(MDS) métrico</b>, en <b>MATLAB</b> con su función <span class="mono" style="font-size:20px">mdscale</span>.</div>
+  <div class="abs" style="left:80px;right:80px;top:420px;display:grid;grid-template-columns:repeat(4,1fr);gap:40px">
+    <div class="r" style="--d:700"><span class="tag k">Paso 1</span><div class="sm">Generaron <b>datos artificiales</b></div></div>
+    <div class="r" style="--d:1100"><span class="tag k">Paso 2</span><div class="sm">Calcularon las <b>distancias euclidianas</b> entre todos los pares de elementos</div></div>
+    <div class="r" style="--d:1500"><span class="tag k">Paso 3</span><div class="sm">Con esas distancias el <b>MDS construyó un mapa</b>: cada elemento se ubica según su similitud o diferencia con los demás</div></div>
+    <div class="r" style="--d:1900"><span class="tag">Paso 4</span><div class="sm"><b>Compararon el mapa</b> con la estructura original para ver qué tan bien representaba las relaciones reales</div></div>
+  </div>
+  <div class="r abs card fill" style="--d:2400;left:80px;right:80px;top:680px">
+    <span class="tag">Para comprobarlo modificaron 3 condiciones</span>
+    <div class="sm">Cantidad de elementos · nivel de ruido en los datos · número de dimensiones utilizadas. <b>Cada condición se repitió 500 veces</b> para evaluar la <b class="red">precisión y confiabilidad</b> del MDS en diferentes escenarios.</div>
+  </div>
+</section>
+
 <!-- ===================== 5 · RESULTADOS (a) ===================== -->
 <section class="slide" data-sec="5" data-notes="<h4>Resultados · cómo se generó y cómo se midió</h4><ul><li>La simulación tuvo 4 pasos. Primero se generaron coordenadas &quot;verdaderas&quot; con distribución uniforme entre −5 y 5, en 2 a 6 dimensiones, con una desviación estándar de unas 2,89 unidades.</li><li>Luego se simularon 10 participantes sumando a esas coordenadas un ruido de distribución normal, con desviaciones estándar de 1, de 5 y de 10. Con ruido de 10 el error es más de 3 veces la dispersión de los datos reales: un escenario muy adverso (las barras lo muestran a escala).</li><li>Se calcularon las distancias euclidianas entre todos los pares para cada participante y se promediaron entre los 10, lo que reduce parte del ruido. Al final se aplicó MDS métrico con la función mdscale de MATLAB, que acomoda los puntos para que sus distancias se parezcan lo más posible a las de entrada.</li><li>Para medirlo existe el stress (desajuste del mapa), pero los autores no lo reportan porque ya se sabe que sube con más ítems y más ruido.</li><li>Su indicador central es la determinación: el R² (correlación de Pearson al cuadrado) entre los vectores de distancias de la solución MDS y las distancias &quot;verdaderas&quot;. Se interpreta igual que en la regresión, como % de varianza explicada. Como control usan la correspondencia, que compara los datos crudos promediados (antes del MDS) con las distancias verdaderas.</li></ul>">
   <div class="grid"></div>
